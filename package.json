@@ -1,0 +1,33 @@
+{
+  "name": "cemu-smmdb",
+  "version": "1.0.0",
+  "description": "What does the fox say",
+  "main": "main.bundle.js",
+  "scripts": {
+    "start": "webpack --env=dev && electron .",
+    "build": "webpack --env=prod && electron-packager . --overwrite"
+  },
+  "repository": "https://github.com/Tarnadas/cemu-smmdb",
+  "keywords": [
+    "Cemu",
+    "smmdb",
+    "Super",
+    "Mario",
+    "Maker"
+  ],
+  "author": "Mario Reder",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "electron": "~1.6.2",
+    "electron-packager": "^8.6.0",
+    "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony",
+    "webpack": "^2.4.1"
+  },
+  "dependencies": {
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  }
+}

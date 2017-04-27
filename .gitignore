@@ -1,0 +1,5 @@
+/.idea/
+node_modules
+/gui/renderer.bundle.js
+/main.bundle.js
+/cemu-smmdb-win32-x64/
