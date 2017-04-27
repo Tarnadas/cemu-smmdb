@@ -3,6 +3,7 @@ const path    = require('path');
 
 module.exports = [
     {
+        target: "electron",
         entry: {
             "renderer": path.join(__dirname, 'gui/renderer.js')
         },

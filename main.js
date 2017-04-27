@@ -10,15 +10,17 @@ const url  = require('url');
 const fs   = require('fs');
 
 let mainWindow = null;
+let webContents = electron.webContents;
+console.log(webContents);
 
 //crashReporter.start()
 
 function createWindow () {
-    mainWindow = new BrowserWindow({width: 800, height: 600})
+    mainWindow = new BrowserWindow({width: 1200, height: 900});
 
     mainWindow.loadURL('file://' + __dirname + '/gui/index.html');
 
-    //mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools();
 
     mainWindow.on('closed', () => {
         mainWindow = null
