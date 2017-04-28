@@ -1,42 +1,71 @@
-const electron = require('electron');
+import electron from 'electron';
+
+import path from 'path';
+import fs   from 'fs';
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
-//const crashReporter = electron.crashReporter
-//const shell = electron.shell
 
-const path = require('path');
-const url  = require('url');
-const fs   = require('fs');
+(async () => {
+    let mainWindow = null;
+    let localSave = path.resolve(`${app.getPath('appData')}/cemu-smmdb`);
+    let savePath = path.join(`${localSave}/save.txt`);
+    let saveData;
+    if (!!localSave) {
+        if (fs.existsSync(savePath)) {
+            try {
+                saveData = JSON.parse(fs.readFileSync(savePath));
+                /*saveData = await new Promise((resolve, reject) => {
+                    fs.readFile(savePath, (err, data) => {
+                        resolve();
+                        if (err) {
+                            reject(err);
+                        }
+                        try {
+                            resolve(JSON.parse(data));
+                        } catch (err) {
+                            resolve();
+                        }
+                    });
+                });*/
+            } catch (err) {
+                // ignore ?
+            }
+        } else {
+            fs.writeFile(savePath, "");
+        }
+    }
+    global.save = {
+        saveData: saveData,
+        savePath: savePath
+    };
 
-let mainWindow = null;
-let webContents = electron.webContents;
-console.log(webContents);
+    function createWindow () {
+        mainWindow = new BrowserWindow({width: 1200, height: 900});
 
-//crashReporter.start()
+        mainWindow.loadURL('file://' + __dirname + '/gui/index.html');
 
-function createWindow () {
-    mainWindow = new BrowserWindow({width: 1200, height: 900});
+        if (process.env.NODE_ENV === 'development') {
+            mainWindow.webContents.openDevTools();
+        }
 
-    mainWindow.loadURL('file://' + __dirname + '/gui/index.html');
+        mainWindow.on('closed', () => {
+            mainWindow = null
+        })
+    }
 
-    mainWindow.webContents.openDevTools();
+    app.on('ready', createWindow);
 
-    mainWindow.on('closed', () => {
-        mainWindow = null
-    })
-}
+    app.on('window-all-closed', () => {
+        app.quit()
+    });
 
-app.on('ready', createWindow);
+    app.on('activate', () => {
+        createWindow()
+    });
 
-app.on('window-all-closed', () => {
-    app.quit()
-});
+    app.on('uncaughtException', (err) => {
+        fs.writeFileSync('./error_log.txt', err)
+    });
 
-app.on('activate', () => {
-    createWindow()
-});
-
-app.on('uncaughtException', (err) => {
-    fs.writeFileSync('./error_log.txt', err)
-});
+})();

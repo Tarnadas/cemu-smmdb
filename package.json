@@ -4,8 +4,8 @@
   "description": "What does the fox say",
   "main": "main.bundle.js",
   "scripts": {
-    "start": "webpack --env=dev && electron .",
-    "build": "webpack --env=prod && electron-packager . --overwrite"
+    "start": "set NODE_ENV=development&& webpack --env=dev && electron .",
+    "build": "set NODE_ENV=production&& webpack --env=prod && electron-packager . --overwrite"
   },
   "repository": "https://github.com/Tarnadas/cemu-smmdb",
   "keywords": [
@@ -28,9 +28,12 @@
     "webpack": "^2.4.1"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "cemu-smm": "^1.0.5",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "reactcss": "^1.2.2"
+    "react-redux": "^5.0.4",
+    "reactcss": "^1.2.2",
+    "redux": "^3.6.0"
   }
 }

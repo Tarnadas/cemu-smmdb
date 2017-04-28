@@ -22,9 +22,6 @@ module.exports = [
             ]
         },
         plugins: [
-            new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify('production')
-            }),
             new webpack.LoaderOptionsPlugin({
                 minimize: true,
                 debug: false
@@ -35,7 +32,8 @@ module.exports = [
                     keep_fnames: true
                 },
                 comments: false
-            })
+            }),
+            new webpack.EnvironmentPlugin('NODE_ENV')
         ]
     },
     {
@@ -50,9 +48,6 @@ module.exports = [
             __filename: false
         },
         plugins: [
-            new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify('production')
-            }),
             new webpack.LoaderOptionsPlugin({
                 minimize: true,
                 debug: false
@@ -63,7 +58,8 @@ module.exports = [
                     keep_fnames: true
                 },
                 comments: false
-            })
+            }),
+            new webpack.EnvironmentPlugin('NODE_ENV')
         ]
     }
 ];

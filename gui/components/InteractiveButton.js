@@ -1,21 +1,24 @@
 import React    from 'react';
 import ReactCSS from 'reactcss';
+import { connect } from 'react-redux';
+import { remote } from 'electron';
 
-const {dialog} = require('electron').remote;
+import setSavePath from '../actions';
 
-export default class InteractiveButton extends React.Component {
+const dialog = remote.dialog;
+
+class InteractiveButton extends React.Component {
     constructor (props) {
         super(props);
         if (props.type === 'loadSave') {
             this.handleClick = this.loadSave.bind(this);
-            this.isInput = true;
-        } else {
-            this.isInput = false;
         }
     }
     loadSave () {
         dialog.showOpenDialog({properties: ['openFile']}, (path) => {
-            console.log(path);
+            if (!!path) {
+                this.props.dispatch(setSavePath(path));
+            }
         });
     }
     render () {
@@ -52,3 +55,4 @@ export default class InteractiveButton extends React.Component {
         )
     }
 }
+export default connect()(InteractiveButton);

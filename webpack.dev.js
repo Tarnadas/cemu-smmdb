@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path    = require('path');
 
 module.exports = [
@@ -19,7 +20,10 @@ module.exports = [
                     loader: 'babel-loader'
                 }
             ]
-        }
+        },
+        plugins: [
+            new webpack.EnvironmentPlugin('NODE_ENV')
+        ]
     },
     {
         target: "electron",
@@ -31,6 +35,9 @@ module.exports = [
         node: {
             __dirname: false,
             __filename: false
-        }
+        },
+        plugins: [
+            new webpack.EnvironmentPlugin('NODE_ENV')
+        ]
     }
 ];
