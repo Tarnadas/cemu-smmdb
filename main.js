@@ -1,4 +1,6 @@
 import electron from 'electron';
+import log from 'electron-log';
+import smm from 'cemu-smm';
 
 import path from 'path';
 import fs   from 'fs';
@@ -9,36 +11,35 @@ const BrowserWindow = electron.BrowserWindow;
 (async () => {
     let mainWindow = null;
     let localSave = path.resolve(`${app.getPath('appData')}/cemu-smmdb`);
-    let savePath = path.join(`${localSave}/save.txt`);
-    let saveData;
+    let appSavePath = path.join(`${localSave}/save.txt`);
+    let appSaveData = {}, cemuSavePath;
     if (!!localSave) {
-        if (fs.existsSync(savePath)) {
+        if (fs.existsSync(appSavePath)) {
             try {
-                saveData = JSON.parse(fs.readFileSync(savePath));
-                /*saveData = await new Promise((resolve, reject) => {
-                    fs.readFile(savePath, (err, data) => {
-                        resolve();
-                        if (err) {
-                            reject(err);
-                        }
-                        try {
-                            resolve(JSON.parse(data));
-                        } catch (err) {
-                            resolve();
-                        }
-                    });
-                });*/
+                appSaveData = JSON.parse(fs.readFileSync(appSavePath));
+                cemuSavePath = appSaveData.cemuSavePath;
             } catch (err) {
                 // ignore ?
             }
         } else {
-            fs.writeFile(savePath, "");
+            fs.writeFile(appSavePath, "");
         }
     }
     global.save = {
-        saveData: saveData,
-        savePath: savePath
+        appSaveData: appSaveData,
+        appSavePath: appSavePath
     };
+    if (!!cemuSavePath) {
+        global.save.cemuSavePath = cemuSavePath;
+        try {
+            global.save.cemuSave = smm.loadSaveSync(cemuSavePath);
+            global.save.cemuSave.reorderSync();
+            global.save.cemuSave.loadCoursesSync();
+            global.save.cemuSave.exportJpegSync();
+        } catch (err) {
+            log.error(err); // TODO
+        }
+    }
 
     function createWindow () {
         mainWindow = new BrowserWindow({width: 1200, height: 900});

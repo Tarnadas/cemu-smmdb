@@ -5,19 +5,25 @@ module.exports = [
     {
         target: "electron",
         entry: {
-            "renderer": path.join(__dirname, 'gui/renderer.js')
+            "renderer": ["babel-polyfill", path.join(__dirname, 'gui/renderer.js')]
         },
         output: {
             filename: '[name].bundle.js',
-            path: path.join(__dirname, 'gui'),
-            //sourceMapFilename: '[name].map'
+            path: path.join(__dirname, 'gui')
         },
         module: {
             loaders: [
                 {
                     test: /\.js$/,
                     exclude: /node_modules/,
-                    loader: 'babel-loader'
+                    loader: 'babel-loader',
+                    query: {
+                        plugins: ["transform-react-jsx", "transform-es2015-arrow-functions", "transform-async-to-generator"]
+                    }
+                },
+                {
+                    test: /\.(png|jpg)$/,
+                    loader: 'url-loader?limit=25000'
                 }
             ]
         },
@@ -38,14 +44,25 @@ module.exports = [
     },
     {
         target: "electron",
-        entry: path.join(__dirname, 'main.js'),
+        entry: ["babel-polyfill", path.join(__dirname, 'main.js')],
         output: {
-            filename: '[name].bundle.js',
-            //sourceMapFilename: '[name].map'
+            filename: '[name].bundle.js'
         },
         node: {
             __dirname: false,
             __filename: false
+        },
+        module: {
+            loaders: [
+                {
+                    test: /\.js$/,
+                    exclude: /node_modules/,
+                    loader: 'babel-loader',
+                    query: {
+                        plugins: ["transform-es2015-arrow-functions", "transform-async-to-generator"]
+                    }
+                }
+            ]
         },
         plugins: [
             new webpack.LoaderOptionsPlugin({

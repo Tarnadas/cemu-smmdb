@@ -1,9 +1,9 @@
-const setSavePath = (savePath) => {
-    //console.log("action: " + savePath);
+const setSave = (cemuSavePath, cemuSave) => {
     return {
-        type: 'SET_SAVE_PATH',
-        savePath
+        type: 'SET_SAVE',
+        cemuSavePath,
+        cemuSave
     }
 };
 
-export default setSavePath;
+export default setSave;

@@ -17,7 +17,14 @@ module.exports = [
                 {
                     test: /\.js$/,
                     exclude: /node_modules/,
-                    loader: 'babel-loader'
+                    loader: 'babel-loader',
+                    query: {
+                        plugins: ["transform-react-jsx"]
+                    }
+                },
+                {
+                    test: /\.(png|jpg)$/,
+                    loader: 'url-loader?limit=25000'
                 }
             ]
         },

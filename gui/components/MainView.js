@@ -7,13 +7,13 @@ import SaveView from '../components/SaveView';
 class MainView extends React.Component {
     render() {
         return (
-            !this.props.save.saveData ? (
+            !this.props.save.cemuSave ? (
                 <div>
                     <LoadSaveView />
                 </div>
             ) : (
                 <div>
-                    <SaveView />
+                    <SaveView save={this.props.save.cemuSave} />
                 </div>
             )
         )

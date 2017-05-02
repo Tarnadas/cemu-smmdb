@@ -2,8 +2,9 @@ import React    from 'react';
 import ReactCSS from 'reactcss';
 import { connect } from 'react-redux';
 import { remote } from 'electron';
+import smm from 'cemu-smm';
 
-import setSavePath from '../actions';
+import setSave from '../actions';
 
 const dialog = remote.dialog;
 
@@ -15,9 +16,17 @@ class InteractiveButton extends React.Component {
         }
     }
     loadSave () {
-        dialog.showOpenDialog({properties: ['openFile']}, (path) => {
+        dialog.showOpenDialog({properties: ['openDirectory']}, async (path) => {
             if (!!path) {
-                this.props.dispatch(setSavePath(path));
+                path = path[0];
+                try {
+                    let cemuSave = await smm.loadSave(path);
+                    await cemuSave.reorder();
+                    await cemuSave.exportJpeg();
+                    this.props.dispatch(setSave(path, cemuSave));
+                } catch (err) {
+                    console.log(err); // TODO
+                }
             }
         });
     }

@@ -14,3 +14,11 @@ html, body {
     font-family: SuperMarioMakerExtended,SuperMarioMaker,Roboto,arial,sans-serif;
     color: #323245;
 }
+@keyframes scroll{
+    0% {
+        left: 0;
+    }
+    100% {
+        left: -250px;
+    }
+}

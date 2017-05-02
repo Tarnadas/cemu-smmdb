@@ -20,16 +20,21 @@
   "devDependencies": {
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-es2015-arrow-functions": "^6.22.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
-    "babel-preset-env": "^1.4.0",
+    "babel-polyfill": "^6.23.0",
     "electron": "~1.6.2",
     "electron-packager": "^8.6.0",
+    "file-loader": "^0.11.1",
     "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony",
+    "url-loader": "^0.5.8",
     "webpack": "^2.4.1"
   },
   "dependencies": {
     "bluebird": "^3.5.0",
     "cemu-smm": "^1.0.5",
+    "electron-log": "^2.2.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",
