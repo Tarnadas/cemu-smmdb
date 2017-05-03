@@ -85,7 +85,9 @@ export default class SaveFile extends React.Component {
             </li>
         ) : (
             <li style={styles.li}>
-                <div style={styles.divCrop} />
+                <div style={styles.divCrop}>
+                    <img style={styles.img} src={`../assets/images/noise.gif`}/>
+                </div>
                 <div style={styles.divTitle} />
             </li>
         )

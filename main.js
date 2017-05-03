@@ -1,6 +1,5 @@
 import electron from 'electron';
 import log from 'electron-log';
-import smm from 'cemu-smm';
 
 import path from 'path';
 import fs   from 'fs';
@@ -31,18 +30,10 @@ const BrowserWindow = electron.BrowserWindow;
     };
     if (!!cemuSavePath) {
         global.save.cemuSavePath = cemuSavePath;
-        try {
-            global.save.cemuSave = smm.loadSaveSync(cemuSavePath);
-            global.save.cemuSave.reorderSync();
-            global.save.cemuSave.loadCoursesSync();
-            global.save.cemuSave.exportJpegSync();
-        } catch (err) {
-            log.error(err); // TODO
-        }
     }
 
     function createWindow () {
-        mainWindow = new BrowserWindow({width: 1200, height: 900});
+        mainWindow = new BrowserWindow({width: 1300, height: 800});
 
         mainWindow.loadURL('file://' + __dirname + '/gui/index.html');
 

@@ -4,44 +4,65 @@ import { connect } from 'react-redux';
 import { remote } from 'electron';
 import smm from 'cemu-smm';
 
-import setSave from '../actions';
+import * as action from '../actions';
 
 const dialog = remote.dialog;
 
 class InteractiveButton extends React.Component {
     constructor (props) {
         super(props);
-        if (props.type === 'loadSave') {
-            this.handleClick = this.loadSave.bind(this);
+        switch (props.type) {
+            case 'addSave':
+                this.handleClick = this.addSave.bind(this);
+                break;
+            case 'loadSave':
+                this.handleClick = this.loadSave.bind(this);
+                break;
+            default:
         }
     }
-    loadSave () {
+    addSave () {
         dialog.showOpenDialog({properties: ['openDirectory']}, async (path) => {
             if (!!path) {
                 path = path[0];
                 try {
                     let cemuSave = await smm.loadSave(path);
                     await cemuSave.reorder();
+                    await cemuSave.loadCourses();
                     await cemuSave.exportJpeg();
-                    this.props.dispatch(setSave(path, cemuSave));
+                    this.props.dispatch(action.addSave(path, cemuSave));
                 } catch (err) {
                     console.log(err); // TODO
                 }
             }
         });
     }
+    loadSave () {
+        (async () => {
+            try {
+                let cemuSave = await smm.loadSave(this.props.path);
+                await cemuSave.reorder();
+                await cemuSave.loadCourses();
+                await cemuSave.exportJpeg();
+                this.props.dispatch(action.loadSave(cemuSave));
+            } catch (err) {
+                console.log(err); // TODO
+            }
+        })();
+    }
     render () {
         const styles = ReactCSS({
             'default': {
                 button: {
-                    position: 'absolute',
-                    top: 0, left: 0, bottom: 0, right: 0,
-                    margin: 'auto',
-                    width: this.props.width,
+                    display: 'inline-block',
+                    float: 'left',
+                    clear: 'both',
+                    margin: '10px auto',
+                    width: '100%',
+                    padding: '0 10px',
                     height: '40px',
                     lineHeight: '40px',
                     backgroundColor: '#ffe500',
-                    textAlign: 'center',
                     color: '#323245',
                     cursor: 'pointer',
                     outline: 'none',

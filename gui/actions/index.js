@@ -1,9 +1,14 @@
-const setSave = (cemuSavePath, cemuSave) => {
+export function addSave(cemuSavePath, cemuSave) {
     return {
-        type: 'SET_SAVE',
+        type: 'ADD_SAVE',
         cemuSavePath,
         cemuSave
     }
-};
+}
 
-export default setSave;
+export function loadSave(cemuSave) {
+    return {
+        type: 'LOAD_SAVE',
+        cemuSave
+    }
+}

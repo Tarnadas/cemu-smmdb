@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "bluebird": "^3.5.0",
-    "cemu-smm": "^1.0.5",
+    "cemu-smm": "^1.1.7",
     "electron-log": "^2.2.3",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",

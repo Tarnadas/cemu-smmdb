@@ -9,7 +9,7 @@ class MainView extends React.Component {
         return (
             !this.props.save.cemuSave ? (
                 <div>
-                    <LoadSaveView />
+                    <LoadSaveView save={this.props.save.appSaveData.cemuSavePath} />
                 </div>
             ) : (
                 <div>
