@@ -35,10 +35,12 @@
     "bluebird": "^3.5.0",
     "cemu-smm": "^1.1.7",
     "electron-log": "^2.2.3",
+    "immutable": "^3.8.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",
     "reactcss": "^1.2.2",
-    "redux": "^3.6.0"
+    "redux": "^3.6.0",
+    "request-promise": "^4.2.0"
   }
 }

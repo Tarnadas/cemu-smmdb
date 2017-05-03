@@ -28,9 +28,6 @@ const BrowserWindow = electron.BrowserWindow;
         appSaveData: appSaveData,
         appSavePath: appSavePath
     };
-    if (!!cemuSavePath) {
-        global.save.cemuSavePath = cemuSavePath;
-    }
 
     function createWindow () {
         mainWindow = new BrowserWindow({width: 1300, height: 800});

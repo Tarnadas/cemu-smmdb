@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { remote } from 'electron';
 import smm from 'cemu-smm';
 
-import * as action from '../actions';
+import { addSave, loadSave } from '../actions';
 
 const dialog = remote.dialog;
 
@@ -30,7 +30,7 @@ class InteractiveButton extends React.Component {
                     await cemuSave.reorder();
                     await cemuSave.loadCourses();
                     await cemuSave.exportJpeg();
-                    this.props.dispatch(action.addSave(path, cemuSave));
+                    this.props.dispatch(addSave(path, cemuSave));
                 } catch (err) {
                     console.log(err); // TODO
                 }
@@ -44,7 +44,7 @@ class InteractiveButton extends React.Component {
                 await cemuSave.reorder();
                 await cemuSave.loadCourses();
                 await cemuSave.exportJpeg();
-                this.props.dispatch(action.loadSave(cemuSave));
+                this.props.dispatch(loadSave(cemuSave));
             } catch (err) {
                 console.log(err); // TODO
             }

@@ -1,11 +1,11 @@
+import { Map } from 'immutable';
 import { remote } from 'electron';
-
 import fs from 'fs';
 
-const mainApp = (state = {}, action) => {
+export default function mainApp (state, action) {
     switch (action.type) {
         case 'ADD_SAVE':
-            let appSaveData = state.save.appSaveData;
+            let appSaveData = state.get('appSaveData');
             if (!appSaveData.cemuSavePath) {
                 appSaveData.cemuSavePath = [action.cemuSavePath];
             } else {
@@ -13,30 +13,20 @@ const mainApp = (state = {}, action) => {
                 ar.push(action.cemuSavePath);
                 appSaveData.cemuSavePath = ar;
             }
-            console.log(appSaveData.cemuSavePath);
-            fs.writeFileSync(state.save.appSavePath, JSON.stringify(appSaveData));
-            return {
-                save: {
-                    appSaveData: appSaveData,
-                    appSavePath: state.save.appSavePath,
-                    cemuSave: action.cemuSave
-                }
-            };
+            fs.writeFileSync(state.get('appSavePath'), JSON.stringify(appSaveData));
+            state = state.set('appSaveData', appSaveData);
+            state = state.set('cemuSave', action.cemuSave);
             return state;
-            break;
         case 'LOAD_SAVE':
-            return {
-                save: {
-                    appSaveData: state.save.appSaveData,
-                    appSavePath: state.save.appSavePath,
-                    cemuSave: action.cemuSave
-                }
-            };
+            state = state.set('cemuSave', action.cemuSave);
+            return state;
+        case 'SMMDB_RESULT':
+            state = state.set('smmdb', action.courses);
+            return state;
         default:
             let save = remote.getGlobal('save');
             console.log(save);
-            return {save};
+            return Map(save);
+
     }
 };
-
-export default mainApp;

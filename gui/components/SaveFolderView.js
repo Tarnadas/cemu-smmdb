@@ -4,7 +4,7 @@ import { remote } from 'electron';
 import SaveFile from "./SaveFile";
 
 export default class SaveFolderView extends React.Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.state = {
             courseNames: []
@@ -13,22 +13,24 @@ export default class SaveFolderView extends React.Component {
             this.state.courseNames.push(`course${i.pad(3)}`);
         }
     }
-    render() {
+    render () {
         const courses = this.props.save.courses;
         const styles = ReactCSS({
             'default': {
                 div: {
-                    display: 'flex',
-                    alignItems: 'center',
+                    //display: 'flex',
+                    //alignItems: 'center',
                     width: '100%',
                     height: '100vh',
                     minHeight: '100vh',
-                    backgroundColor: '#f4f47b'
+                    //backgroundColor: '#f4f47b'
                 },
                 ul: {
                     margin: 'auto',
-                    width: '70%',
-                    height: '80%',
+                    position: 'absolute',
+                    top: '0', right: '0', bottom: '0', left: '0',
+                    width: 'calc(100% - 180px)',
+                    height: 'calc(100% - 140px)',
                     backgroundColor: '#07070f',
                     color: '#fff',
                     overflowY: 'scroll',
