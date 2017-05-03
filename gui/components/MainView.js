@@ -23,8 +23,8 @@ class MainView extends React.Component {
         (async () => {
             switch (this.state.currentView) {
                 case SAVE_FOLDER_VIEW:
-                    let courses = await request('http://smmdb.ddns.net/api/getcourses');
-                    smmdbResult(courses);
+                    let courses = JSON.parse(await request('http://smmdb.ddns.net/api/getcourses'));
+                    this.props.dispatch(smmdbResult(courses));
                     this.setState({
                         currentView: SMMDB_VIEW
                     });

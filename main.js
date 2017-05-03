@@ -30,7 +30,11 @@ const BrowserWindow = electron.BrowserWindow;
     };
 
     function createWindow () {
-        mainWindow = new BrowserWindow({width: 1300, height: 800});
+        mainWindow = new BrowserWindow({
+            width: 1300,
+            height: 800,
+            icon: path.join(__dirname, 'assets/images/64x64.png')
+        });
 
         mainWindow.loadURL('file://' + __dirname + '/gui/index.html');
 

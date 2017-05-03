@@ -21,11 +21,10 @@ export default function mainApp (state, action) {
             state = state.set('cemuSave', action.cemuSave);
             return state;
         case 'SMMDB_RESULT':
-            state = state.set('smmdb', action.courses);
+            state = state.set('smmdb', action.smmdb);
             return state;
         default:
             let save = remote.getGlobal('save');
-            console.log(save);
             return Map(save);
 
     }

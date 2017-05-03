@@ -13,9 +13,9 @@ export function loadSave (cemuSave) {
     }
 }
 
-export function smmdbResult (courses) {
+export function smmdbResult (smmdb) {
     return {
         type: 'SMMDB_RESULT',
-        courses
+        smmdb: smmdb
     }
 }

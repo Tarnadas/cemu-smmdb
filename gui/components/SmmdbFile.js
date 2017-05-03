@@ -39,11 +39,13 @@ export default class SaveFile extends React.Component {
                     height: '90px',
                     overflow: 'hidden',
                     display: 'inline-block',
+                    backgroundColor: '#323245',
+                    textAlign: 'center'
                 },
                 img: {
-                    width: '160px',
+                    width: 'auto',
                     height: '120px',
-                    backgroundColor: '#323245'
+                    margin: 'auto'
                 },
                 divTitle: {
                     margin: '10px 0 0 10px',
@@ -72,23 +74,16 @@ export default class SaveFile extends React.Component {
                 }
             }
         });
-        return !!this.props.course ? (
+        return (
             <li style={styles.li} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
                 <div style={styles.divCrop}>
-                    <img style={styles.img} src={`${this.props.course.path}/thumbnail1.jpg`}/>
+                    <img style={styles.img} src={`http://smmdb.ddns.net/img/courses/thumbnails/${this.props.course.id}.pic`}/>
                 </div>
                 <div style={styles.divTitle}>
                     <div style={this.state.hover ? styles.divScroll : styles.divScrollPaused}>
                         {this.props.course.title}
                     </div>
                 </div>
-            </li>
-        ) : (
-            <li style={styles.li}>
-                <div style={styles.divCrop}>
-                    <img style={styles.img} src={`../assets/images/noise.gif`}/>
-                </div>
-                <div style={styles.divTitle} />
             </li>
         )
 
