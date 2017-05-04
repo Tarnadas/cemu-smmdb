@@ -5,10 +5,12 @@ export default class SaveFile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            hover: false
+            hover: false,
+            error: false
         };
         this.mouseEnter = this.mouseEnter.bind(this);
         this.mouseLeave = this.mouseLeave.bind(this);
+        this.onError = this.onError.bind(this);
     }
     mouseEnter() {
         this.setState({
@@ -18,6 +20,12 @@ export default class SaveFile extends React.Component {
     mouseLeave() {
         this.setState({
             hover: false
+        });
+    }
+    onError (e) {
+        e.preventDefault();
+        this.setState({
+            error: true
         });
     }
     render() {
@@ -77,7 +85,13 @@ export default class SaveFile extends React.Component {
         return (
             <li style={styles.li} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
                 <div style={styles.divCrop}>
-                    <img style={styles.img} src={`http://smmdb.ddns.net/img/courses/thumbnails/${this.props.course.id}.pic`}/>
+                    <img style={styles.img} onError={this.onError} src={
+                        this.state.error ? (
+                            !this.props.course.videoid ? '../assets/images/icon.png' : `https://img.youtube.com/vi/${this.props.course.videoid}/0.jpg`
+                        ) : (
+                            `http://smmdb.ddns.net/img/courses/thumbnails/${this.props.course.id}.pic`
+                        )
+                    }/>
                 </div>
                 <div style={styles.divTitle}>
                     <div style={this.state.hover ? styles.divScroll : styles.divScrollPaused}>

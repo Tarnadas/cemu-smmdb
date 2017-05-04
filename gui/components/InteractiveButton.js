@@ -20,6 +20,11 @@ class InteractiveButton extends React.Component {
                 break;
             default:
         }
+        this.state = {
+            hover: false
+        };
+        this.mouseEnter = this.mouseEnter.bind(this);
+        this.mouseLeave = this.mouseLeave.bind(this);
     }
     addSave () {
         dialog.showOpenDialog({properties: ['openDirectory']}, async (path) => {
@@ -50,6 +55,16 @@ class InteractiveButton extends React.Component {
             }
         })();
     }
+    mouseEnter() {
+        this.setState({
+            hover: true
+        });
+    }
+    mouseLeave() {
+        this.setState({
+            hover: false
+        });
+    }
     render () {
         const styles = ReactCSS({
             'default': {
@@ -73,13 +88,33 @@ class InteractiveButton extends React.Component {
                     borderRadius: '5px',
                     boxShadow: '1px 4px 13px 0px rgba(0,0,0,0.5)'
                 },
+                buttonHover: {
+                    display: 'inline-block',
+                    float: 'left',
+                    clear: 'both',
+                    margin: '10px auto',
+                    width: '100%',
+                    padding: '0 10px',
+                    height: '40px',
+                    lineHeight: '40px',
+                    backgroundColor: '#323245',
+                    color: '#fff',
+                    cursor: 'pointer',
+                    outline: 'none',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    boxSizing: 'border-box',
+                    border: '0px solid #000000',
+                    borderRadius: '5px',
+                    boxShadow: '1px 4px 13px 0px rgba(0,0,0,0.5)'
+                },
                 input: {
                     display: 'none'
                 }
             },
         });
         return (
-            <div style={styles.button} onClick={this.handleClick}>
+            <div style={this.state.hover ? styles.buttonHover : styles.button} onClick={this.handleClick} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
                 {this.props.value}
             </div>
         )

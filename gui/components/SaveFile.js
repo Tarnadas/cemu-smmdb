@@ -2,25 +2,29 @@ import React from 'react';
 import ReactCSS from 'reactcss';
 
 export default class SaveFile extends React.Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.state = {
             hover: false
         };
         this.mouseEnter = this.mouseEnter.bind(this);
         this.mouseLeave = this.mouseLeave.bind(this);
+        this.onClick = this.onClick.bind(this);
     }
-    mouseEnter() {
+    mouseEnter () {
         this.setState({
             hover: true
         });
     }
-    mouseLeave() {
+    mouseLeave () {
         this.setState({
             hover: false
         });
     }
-    render() {
+    onClick () {
+        this.props.onClick(this.props.course)
+    }
+    render () {
         const styles = ReactCSS({
             'default': {
                 li: {
@@ -73,7 +77,7 @@ export default class SaveFile extends React.Component {
             }
         });
         return !!this.props.course ? (
-            <li style={styles.li} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
+            <li style={styles.li} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} onClick={this.onClick}>
                 <div style={styles.divCrop}>
                     <img style={styles.img} src={`${this.props.course.path}/thumbnail1.jpg`}/>
                 </div>

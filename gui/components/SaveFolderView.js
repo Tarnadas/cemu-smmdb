@@ -1,29 +1,43 @@
 import React from 'react';
 import ReactCSS from 'reactcss';
 import { remote } from 'electron';
+
 import SaveFile from "./SaveFile";
+import SaveFileDetails from "./SaveFileDetails";
 
 export default class SaveFolderView extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            courseNames: []
+            courseNames: [],
+            display: false
         };
         for (let i = 0; i < 120; i++) {
             this.state.courseNames.push(`course${i.pad(3)}`);
         }
+        this.showSaveDetails = this.showSaveDetails.bind(this);
+        this.hideSaveDetails = this.hideSaveDetails.bind(this);
+    }
+    showSaveDetails (course) {
+        this.setState({
+            display: true,
+            course
+        })
+    }
+    hideSaveDetails () {
+        this.setState({
+            display: false,
+            course: null
+        })
     }
     render () {
         const courses = this.props.save.courses;
         const styles = ReactCSS({
             'default': {
                 div: {
-                    //display: 'flex',
-                    //alignItems: 'center',
                     width: '100%',
                     height: '100vh',
-                    minHeight: '100vh',
-                    //backgroundColor: '#f4f47b'
+                    minHeight: '100vh'
                 },
                 ul: {
                     margin: 'auto',
@@ -42,11 +56,13 @@ export default class SaveFolderView extends React.Component {
         let self = this;
         return (
             <div style={styles.div}>
+                <SaveFileDetails display={this.state.display} course={this.state.course} onClick={this.hideSaveDetails} />
                 <ul style={styles.ul}>
                     {
                         Array.from((function* () {
                             for (let i = 0; i < 120; i++) {
-                                yield <SaveFile course={courses[self.state.courseNames[i]]} key={self.state.courseNames[i]} />
+                                let course = courses[self.state.courseNames[i]];
+                                yield <SaveFile onClick={self.showSaveDetails} course={course} key={self.state.courseNames[i]} />
                             }
                         })())
                     }

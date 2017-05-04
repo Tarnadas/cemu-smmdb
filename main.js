@@ -16,7 +16,6 @@ const BrowserWindow = electron.BrowserWindow;
         if (fs.existsSync(appSavePath)) {
             try {
                 appSaveData = JSON.parse(fs.readFileSync(appSavePath));
-                cemuSavePath = appSaveData.cemuSavePath;
             } catch (err) {
                 // ignore ?
             }
@@ -33,10 +32,10 @@ const BrowserWindow = electron.BrowserWindow;
         mainWindow = new BrowserWindow({
             width: 1300,
             height: 800,
-            icon: path.join(__dirname, 'assets/images/64x64.png')
+            icon: path.join(__dirname, 'assets/images/icon.png')
         });
 
-        mainWindow.loadURL('file://' + __dirname + '/gui/index.html');
+        mainWindow.loadURL(`file://${__dirname}/gui/index.html`);
 
         if (process.env.NODE_ENV === 'development') {
             mainWindow.webContents.openDevTools();
