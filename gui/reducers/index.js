@@ -12,7 +12,7 @@ export default function mainApp (state, action) {
             if (!cemuSavePath) {
                 cemuSavePath = List([action.cemuSavePath]);
             } else {
-                cemuSavePath.push(action.cemuSavePath);
+                cemuSavePath = cemuSavePath.push(action.cemuSavePath);
             }
             appSaveData = appSaveData.set('cemuSavePath', cemuSavePath);
             fs.writeFileSync(state.get('appSavePath'), JSON.stringify(appSaveData));
