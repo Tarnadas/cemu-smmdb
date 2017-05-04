@@ -3,10 +3,28 @@ import ReactCSS from 'reactcss';
 import { connect } from 'react-redux';
 
 import SmmdbFile from './SmmdbFile';
+import SmmdbFileDetails from './SmmdbFileDetails';
 
 class SmmdbView extends React.Component {
+    constructor (props) {
+        super(props);
+        this.state = {
+            course: null
+        };
+        this.showSaveDetails = this.showSaveDetails.bind(this);
+        this.hideSaveDetails = this.hideSaveDetails.bind(this);
+    }
+    showSaveDetails (course) {
+        this.setState({
+            course
+        })
+    }
+    hideSaveDetails () {
+        this.setState({
+            course: null
+        })
+    }
     render () {
-        //const courses = this.props.save.courses;
         const styles = ReactCSS({
             'default': {
                 div: {
@@ -34,12 +52,13 @@ class SmmdbView extends React.Component {
         let self = this;
         return (
             <div style={styles.div}>
+                <SmmdbFileDetails course={this.state.course} onClick={this.hideSaveDetails} />
                 <ul style={styles.ul}>
                     {
                         Array.from((function* () {
                             for (let i = 0; i < self.props.order.length; i++) {
                                 let course = self.props.courses[self.props.order[i]];
-                                yield <SmmdbFile course={course} key={course.id} />
+                                yield <SmmdbFile onClick={self.showSaveDetails} course={course} key={course.id} />
                             }
                         })())
                     }

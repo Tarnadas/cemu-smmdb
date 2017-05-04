@@ -10,7 +10,7 @@ export default class SaveFolderView extends React.Component {
         super(props);
         this.state = {
             courseNames: [],
-            display: false
+            course: null
         };
         for (let i = 0; i < 120; i++) {
             this.state.courseNames.push(`course${i.pad(3)}`);
@@ -20,13 +20,11 @@ export default class SaveFolderView extends React.Component {
     }
     showSaveDetails (course) {
         this.setState({
-            display: true,
             course
         })
     }
     hideSaveDetails () {
         this.setState({
-            display: false,
             course: null
         })
     }
@@ -56,7 +54,7 @@ export default class SaveFolderView extends React.Component {
         let self = this;
         return (
             <div style={styles.div}>
-                <SaveFileDetails display={this.state.display} course={this.state.course} onClick={this.hideSaveDetails} />
+                <SaveFileDetails course={this.state.course} onClick={this.hideSaveDetails} />
                 <ul style={styles.ul}>
                     {
                         Array.from((function* () {

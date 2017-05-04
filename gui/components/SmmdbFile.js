@@ -11,6 +11,7 @@ export default class SaveFile extends React.Component {
         this.mouseEnter = this.mouseEnter.bind(this);
         this.mouseLeave = this.mouseLeave.bind(this);
         this.onError = this.onError.bind(this);
+        this.onClick = this.onClick.bind(this);
     }
     mouseEnter() {
         this.setState({
@@ -27,6 +28,9 @@ export default class SaveFile extends React.Component {
         this.setState({
             error: true
         });
+    }
+    onClick () {
+        this.props.onClick(this.props.course)
     }
     render() {
         const styles = ReactCSS({
@@ -83,11 +87,11 @@ export default class SaveFile extends React.Component {
             }
         });
         return (
-            <li style={styles.li} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
+            <li style={styles.li} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} onClick={this.onClick}>
                 <div style={styles.divCrop}>
                     <img style={styles.img} onError={this.onError} src={
                         this.state.error ? (
-                            !this.props.course.videoid ? '../assets/images/icon.png' : `https://img.youtube.com/vi/${this.props.course.videoid}/0.jpg`
+                            !this.props.course.videoid ? '../assets/images/icon_large.png' : `https://img.youtube.com/vi/${this.props.course.videoid}/0.jpg`
                         ) : (
                             `http://smmdb.ddns.net/img/courses/thumbnails/${this.props.course.id}.pic`
                         )

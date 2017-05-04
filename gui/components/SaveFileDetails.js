@@ -12,8 +12,8 @@ export default class SaveFileDetails extends React.Component {
                     margin: 'auto',
                     position: 'absolute',
                     top: '0', right: '0', bottom: '0', left: '0',
-                    width: 'calc(100% - 220px)',
-                    height: 'calc(100% - 180px)',
+                    width: '760px',
+                    height: '445px',
                     backgroundColor: '#0d633d',
                     border: '12px solid #42c074',
                     zIndex: '100'
@@ -45,19 +45,44 @@ export default class SaveFileDetails extends React.Component {
                     width: '24px',
                     height: '24px',
                     margin: '4px'
-                }
+                },
+                body: {
+
+                },
+                bodyImg: {
+                    margin: '20px',
+                    width: '320px',
+                    height: '240px'
+                },
+                footerImg: {
+                    margin: '20px',
+                    width: '720px',
+                    height: '81px'
+                },
             },
         });
         return (
-            <div style={this.props.display ? styles.div : styles.divHide}>
-                <div style={styles.header}>
-                    {!!this.props.course && `${this.props.course.title} by ${this.props.course.maker}`}
+            !!this.props.course ? (
+                <div style={styles.div}>
+                    <div style={styles.header}>
+                        {`${this.props.course.title} by ${this.props.course.maker}`}
+                    </div>
+                    <div style={styles.cancel} onClick={this.props.onClick}>
+                        <img style={styles.cancelImg} src="../assets/images/cancel.svg" />
+                    </div>
+                    <div style={styles.line} />
+                    <div style={styles.body}>
+                        <img style={styles.bodyImg} src={`${this.props.course.path}/thumbnail1.jpg`} />
+
+                    </div>
+                    <div style={styles.line} />
+                    <div style={styles.footer}>
+                        <img style={styles.footerImg} src={`${this.props.course.path}/thumbnail0.jpg`} />
+                    </div>
                 </div>
-                <div style={styles.cancel} onClick={this.props.onClick}>
-                    <img style={styles.cancelImg} src="../assets/images/cancel.svg" />
-                </div>
-                <div style={styles.line} />
-            </div>
+            ) : (
+                <div style={styles.divHide} />
+            )
         )
     }
 }

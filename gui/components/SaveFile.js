@@ -79,7 +79,7 @@ export default class SaveFile extends React.Component {
         return !!this.props.course ? (
             <li style={styles.li} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} onClick={this.onClick}>
                 <div style={styles.divCrop}>
-                    <img style={styles.img} src={`${this.props.course.path}/thumbnail1.jpg`}/>
+                    <img style={styles.img} src={`${this.props.course.path}/thumbnail1.jpg`} />
                 </div>
                 <div style={styles.divTitle}>
                     <div style={this.state.hover ? styles.divScroll : styles.divScrollPaused}>
