@@ -8,6 +8,7 @@ export default class SmmdbFileDetails extends React.Component {
             error: false
         };
         this.onError = this.onError.bind(this);
+        this.onErrorThumbnail = this.onErrorThumbnail.bind(this);
     }
     onError (e) {
         e.preventDefault();
@@ -15,10 +16,17 @@ export default class SmmdbFileDetails extends React.Component {
             error: true
         });
     }
+    onErrorThumbnail (e) {
+        e.preventDefault();
+        this.setState({
+            errorThumbnail: true
+        });
+    }
     componentWillReceiveProps (nextProps) {
         if (nextProps.course !== this.props.course) {
             this.setState({
-                error: false
+                error: false,
+                errorThumbnail: false
             })
         }
     }
@@ -122,8 +130,8 @@ export default class SmmdbFileDetails extends React.Component {
                     <div style={styles.line} />
                     <div style={styles.footer}>
                         <div style={styles.footerImgDiv}>
-                            <img onError={this.onError} style={styles.footerImg} src={
-                                this.state.error ? (
+                            <img onError={this.onErrorThumbnail} style={styles.footerImg} src={
+                                this.state.errorThumbnail ? (
                                     '../assets/images/not_found.png'
                                 ) : (
                                     `http://smmdb.ddns.net/img/courses/thumbnails/${this.props.course.id}.pic`

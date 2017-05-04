@@ -21,7 +21,7 @@ class AppView extends React.Component {
 }
 export default connect((state) => {
     return {
-        cemuSavePath: state.get('appSaveData').cemuSavePath,
+        cemuSavePath: state.get('appSaveData').get('cemuSavePath').toArray(),
         cemuSave: state.get('cemuSave')
     };
 })(AppView);

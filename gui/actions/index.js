@@ -6,6 +6,13 @@ export function addSave (cemuSavePath, cemuSave) {
     }
 }
 
+export function removeSave (cemuSavePath) {
+    return {
+        type: 'REMOVE_SAVE',
+        cemuSavePath
+    }
+}
+
 export function loadSave (cemuSave) {
     return {
         type: 'LOAD_SAVE',

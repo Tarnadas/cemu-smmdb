@@ -28,7 +28,7 @@ export default class LoadSaveView extends React.Component {
                         Array.from((function*() {
                             for (let i = 0; i < self.props.save.length; i++) {
                                 yield (
-                                    <InteractiveButton type="loadSave" value={(() => {
+                                    <InteractiveButton type="loadSave" cancelable value={(() => {
                                         let savePath = self.props.save[i];
                                         let split = savePath.split("\\");
                                         return `Load ${split[split.length - 4]} ${split[split.length - 1]}`;

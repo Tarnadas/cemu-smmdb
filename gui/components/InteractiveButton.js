@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { remote } from 'electron';
 import smm from 'cemu-smm';
 
-import { addSave, loadSave } from '../actions';
+import { addSave, removeSave, loadSave } from '../actions';
 
 const dialog = remote.dialog;
 
@@ -25,6 +25,9 @@ class InteractiveButton extends React.Component {
         };
         this.mouseEnter = this.mouseEnter.bind(this);
         this.mouseLeave = this.mouseLeave.bind(this);
+        if (this.props.cancelable) {
+            this.removeSave = this.removeSave.bind(this);
+        }
     }
     addSave () {
         dialog.showOpenDialog({properties: ['openDirectory']}, async (path) => {
@@ -42,7 +45,12 @@ class InteractiveButton extends React.Component {
             }
         });
     }
-    loadSave () {
+    removeSave (e) {
+        e.stopPropagation();
+        this.props.dispatch(removeSave(this.props.path));
+    }
+    loadSave (e) {
+        e.stopPropagation();
         (async () => {
             try {
                 let cemuSave = await smm.loadSave(this.props.path);
@@ -79,7 +87,6 @@ class InteractiveButton extends React.Component {
                     lineHeight: '40px',
                     backgroundColor: '#ffe500',
                     color: '#323245',
-                    cursor: 'pointer',
                     outline: 'none',
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
@@ -99,23 +106,45 @@ class InteractiveButton extends React.Component {
                     lineHeight: '40px',
                     backgroundColor: '#323245',
                     color: '#fff',
-                    cursor: 'pointer',
                     outline: 'none',
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
                     boxSizing: 'border-box',
                     border: '0px solid #000000',
                     borderRadius: '5px',
-                    boxShadow: '1px 4px 13px 0px rgba(0,0,0,0.5)'
+                    boxShadow: '1px 4px 13px 0px rgba(0,0,0,0.5)',
+                    cursor: 'context-menu'
                 },
                 input: {
                     display: 'none'
+                },
+                cancel: {
+                    float: 'right',
+                    margin: '4px -6px 4px 10px',
+                    width: '32px',
+                    height: '32px',
+                    boxSizing: 'border-box',
+                    borderRadius: '3px',
+                    backgroundColor: '#f4f47b',
+                    cursor: 'pointer'
+                },
+                cancelImg: {
+                    width: '24px',
+                    height: '24px',
+                    margin: '4px'
                 }
             },
         });
         return (
             <div style={this.state.hover ? styles.buttonHover : styles.button} onClick={this.handleClick} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
                 {this.props.value}
+                {
+                    this.props.cancelable && (
+                        <div style={styles.cancel} onClick={this.removeSave}>
+                            <img style={styles.cancelImg} src="../assets/images/cancel_yellow.svg" />
+                        </div>
+                    )
+                }
             </div>
         )
     }
