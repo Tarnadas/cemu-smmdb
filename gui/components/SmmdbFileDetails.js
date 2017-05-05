@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactCSS from 'reactcss';
 
+import InteractiveButton from './InteractiveButton';
+
 export default class SmmdbFileDetails extends React.Component {
     constructor(props) {
         super(props);
@@ -87,7 +89,10 @@ export default class SmmdbFileDetails extends React.Component {
                     width: 'auto',
                     height: '240px'
                 },
-                footerImgDiv: {
+                navigation: {
+
+                },
+                footer: {
                     margin: '20px',
                     width: '720px',
                     height: '81px',
@@ -126,18 +131,19 @@ export default class SmmdbFileDetails extends React.Component {
                                 )
                             )
                         }
+                        <div style={styles.navigation}>
+                            <InteractiveButton type="downloadCourse" value="Download"courseId={this.props.course.id} courseName={this.props.course.title} ownerName={this.props.course.ownername} />
+                        </div>
                     </div>
                     <div style={styles.line} />
                     <div style={styles.footer}>
-                        <div style={styles.footerImgDiv}>
-                            <img onError={this.onErrorThumbnail} style={styles.footerImg} src={
-                                this.state.errorThumbnail ? (
-                                    '../assets/images/not_found.png'
-                                ) : (
-                                    `http://smmdb.ddns.net/img/courses/thumbnails/${this.props.course.id}.pic`
-                                )
-                            } />
-                        </div>
+                        <img onError={this.onErrorThumbnail} style={styles.footerImg} src={
+                            this.state.errorThumbnail ? (
+                                '../assets/images/not_found.png'
+                            ) : (
+                                `http://smmdb.ddns.net/img/courses/thumbnails/${this.props.course.id}.pic`
+                            )
+                        } />
                     </div>
                 </div>
             ) : (

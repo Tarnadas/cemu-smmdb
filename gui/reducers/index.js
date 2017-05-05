@@ -1,7 +1,10 @@
-import { fromJS, Map, List } from 'immutable';
+import { fromJS, List } from 'immutable';
 import { remote } from 'electron';
 
 import fs from 'fs';
+import path from 'path';
+
+import CourseDownloader from '../util/CourseDownloader';
 
 export default function mainApp (state, action) {
     let appSaveData, cemuSavePath;
@@ -15,7 +18,7 @@ export default function mainApp (state, action) {
                 cemuSavePath = cemuSavePath.push(action.cemuSavePath);
             }
             appSaveData = appSaveData.set('cemuSavePath', cemuSavePath);
-            fs.writeFileSync(state.get('appSavePath'), JSON.stringify(appSaveData));
+            fs.writeFileSync(path.join(state.get('appSavePath'), 'save.json'), JSON.stringify(appSaveData));
             state = state.set('appSaveData', appSaveData);
             state = state.set('cemuSave', action.cemuSave);
             return state;
@@ -31,7 +34,7 @@ export default function mainApp (state, action) {
             }
             cemuSavePath = cemuSavePath.delete(index);
             appSaveData = appSaveData.set('cemuSavePath', cemuSavePath);
-            fs.writeFileSync(state.get('appSavePath'), JSON.stringify(appSaveData));
+            fs.writeFileSync(path.join(state.get('appSavePath'), 'save.json'), JSON.stringify(appSaveData));
             state = state.set('appSaveData', appSaveData);
             return state;
         case 'LOAD_SAVE':
@@ -39,6 +42,9 @@ export default function mainApp (state, action) {
             return state;
         case 'SMMDB_RESULT':
             state = state.set('smmdb', action.smmdb);
+            return state;
+        case 'DOWNLOAD_COURSE':
+            new CourseDownloader(action.courseId, action.courseName, action.ownerName, state.get('appSavePath'));
             return state;
         default:
             let save = remote.getGlobal('save');

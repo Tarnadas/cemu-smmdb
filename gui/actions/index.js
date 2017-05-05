@@ -23,6 +23,16 @@ export function loadSave (cemuSave) {
 export function smmdbResult (smmdb) {
     return {
         type: 'SMMDB_RESULT',
-        smmdb: smmdb
+        smmdb
+    }
+}
+
+export function downloadCourse (courseId, courseName, ownerName) {
+    "use strict";
+    return {
+        type: 'DOWNLOAD_COURSE',
+        courseId,
+        courseName,
+        ownerName
     }
 }

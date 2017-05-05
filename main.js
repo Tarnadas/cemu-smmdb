@@ -9,19 +9,16 @@ const BrowserWindow = electron.BrowserWindow;
 
 (async () => {
     let mainWindow = null;
-    let localSave = path.resolve(`${app.getPath('appData')}/cemu-smmdb`);
-    let appSavePath = path.join(`${localSave}/save.txt`);
-    let appSaveData = {}, cemuSavePath;
-    if (!!localSave) {
-        if (fs.existsSync(appSavePath)) {
-            try {
-                appSaveData = JSON.parse(fs.readFileSync(appSavePath));
-            } catch (err) {
-                // ignore ?
-            }
-        } else {
-            fs.writeFile(appSavePath, "");
+    let appSavePath = path.resolve(`${app.getPath('appData')}/cemu-smmdb`);
+    let appSaveData = {};
+    if (fs.existsSync(path.join(appSavePath, 'save.json'))) {
+        try {
+            appSaveData = JSON.parse(fs.readFileSync(path.join(appSavePath, 'save.json')));
+        } catch (err) {
+            // ignore ?
         }
+    } else {
+        fs.writeFile(path.join(appSavePath, 'save.json'), "");
     }
     global.save = {
         appSaveData: appSaveData,

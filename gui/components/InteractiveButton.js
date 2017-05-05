@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { remote } from 'electron';
 import smm from 'cemu-smm';
 
-import { addSave, removeSave, loadSave } from '../actions';
+import { addSave, removeSave, loadSave, downloadCourse } from '../actions';
 
 const dialog = remote.dialog;
 
@@ -17,6 +17,9 @@ class InteractiveButton extends React.Component {
                 break;
             case 'loadSave':
                 this.handleClick = this.loadSave.bind(this);
+                break;
+            case 'downloadCourse':
+                this.handleClick = this.downloadCourse.bind(this);
                 break;
             default:
         }
@@ -62,6 +65,9 @@ class InteractiveButton extends React.Component {
                 console.log(err); // TODO
             }
         })();
+    }
+    downloadCourse () {
+        this.props.dispatch(downloadCourse(this.props.courseId, this.props.courseName, this.props.ownerName));
     }
     mouseEnter() {
         this.setState({

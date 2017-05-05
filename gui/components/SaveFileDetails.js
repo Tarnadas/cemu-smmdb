@@ -54,11 +54,17 @@ export default class SaveFileDetails extends React.Component {
                     width: '320px',
                     height: '240px'
                 },
-                footerImg: {
+                footer: {
                     margin: '20px',
                     width: '720px',
-                    height: '81px'
+                    height: '81px',
+                    overflow: 'hidden',
+                    textAlign: 'center'
                 },
+                footerImg: {
+                    width: 'auto',
+                    height: '81px'
+                }
             },
         });
         return (

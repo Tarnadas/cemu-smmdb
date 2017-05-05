@@ -1,7 +1,7 @@
 {
   "name": "cemu-smmdb",
   "version": "1.0.0",
-  "description": "What does the fox say",
+  "description": "Super Mario Maker Save File Editor",
   "main": "main.bundle.js",
   "scripts": {
     "start": "set NODE_ENV=development&& webpack --env=dev && electron .",
@@ -13,7 +13,10 @@
     "smmdb",
     "Super",
     "Mario",
-    "Maker"
+    "Maker",
+    "Save",
+    "File",
+    "Editor"
   ],
   "author": "Mario Reder",
   "license": "MIT",
@@ -27,6 +30,7 @@
     "electron": "~1.6.2",
     "electron-packager": "^8.6.0",
     "file-loader": "^0.11.1",
+    "prepack-webpack-plugin": "^1.0.1",
     "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony",
     "url-loader": "^0.5.8",
     "webpack": "^2.4.1"
@@ -41,6 +45,7 @@
     "react-redux": "^5.0.4",
     "reactcss": "^1.2.2",
     "redux": "^3.6.0",
+    "request": "^2.81.0",
     "request-promise": "^4.2.0"
   }
 }
