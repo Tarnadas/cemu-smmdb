@@ -31,21 +31,31 @@
     "electron-packager": "^8.6.0",
     "file-loader": "^0.11.1",
     "prepack-webpack-plugin": "^1.0.1",
+    "throttled-request": "^0.1.1",
     "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony",
     "url-loader": "^0.5.8",
     "webpack": "^2.4.1"
   },
   "dependencies": {
+    "@fknop/node-unrar": "^1.1.0",
+    "adm-zip": "^0.4.7",
     "bluebird": "^3.5.0",
     "cemu-smm": "^1.1.7",
+    "cross-unzip": "^0.2.1",
     "electron-log": "^2.2.3",
+    "file-type": "^4.2.0",
     "immutable": "^3.8.1",
+    "mv": "^2.1.1",
+    "node-7z": "^0.4.0",
+    "node-unrar": "git://github.com/Tarnadas/node-unrar",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",
     "reactcss": "^1.2.2",
+    "read-chunk": "^2.0.0",
     "redux": "^3.6.0",
     "request": "^2.81.0",
-    "request-promise": "^4.2.0"
+    "request-promise": "^4.2.0",
+    "win-7zip": "^0.1.1"
   }
 }

@@ -79,6 +79,7 @@ export default class SmmdbFileDetails extends React.Component {
                 body: {
                 },
                 bodyImgDiv: {
+                    display: 'inline-block',
                     margin: '20px',
                     width: '320px',
                     height: '240px',
@@ -90,7 +91,8 @@ export default class SmmdbFileDetails extends React.Component {
                     height: '240px'
                 },
                 navigation: {
-
+                    display: 'inline-block',
+                    textAlign: 'center'
                 },
                 footer: {
                     margin: '20px',
@@ -123,7 +125,7 @@ export default class SmmdbFileDetails extends React.Component {
                                 </div>
                             ) : (
                                 !!this.props.course.videoid ? (
-                                    <iframe style={styles.bodyImgDiv} src={`http://www.youtube.com/embed/${this.props.course.videoid}?disablekb=1&amp;iv_load_policy=3&amp;rel=0&amp;showinfo=0`} frameborder="0" allowFullscreen />
+                                    <iframe style={styles.bodyImgDiv} src={`http://www.youtube.com/embed/${this.props.course.videoid}?disablekb=1&amp;iv_load_policy=3&amp;rel=0&amp;showinfo=0`} frameBorder="0" allowFullScreen />
                                 ) : (
                                     <div style={styles.bodyImgDiv}>
                                         <img onError={this.onError} style={styles.bodyImg} src={`http://smmdb.ddns.net/img/courses/thumbnails/${this.props.course.id}.pic`} />
@@ -132,7 +134,7 @@ export default class SmmdbFileDetails extends React.Component {
                             )
                         }
                         <div style={styles.navigation}>
-                            <InteractiveButton type="downloadCourse" value="Download"courseId={this.props.course.id} courseName={this.props.course.title} ownerName={this.props.course.ownername} />
+                            <InteractiveButton type="downloadCourse" value="Download" courseId={this.props.course.id} courseName={this.props.course.title} ownerName={this.props.course.ownername} />
                         </div>
                     </div>
                     <div style={styles.line} />

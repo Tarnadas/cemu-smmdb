@@ -29,7 +29,10 @@ module.exports = [
             ]
         },
         plugins: [
-            new webpack.EnvironmentPlugin('NODE_ENV')
+            new webpack.EnvironmentPlugin('NODE_ENV'),
+            new webpack.DefinePlugin({
+                __dirname: '__dirname',
+            })
         ]
     },
     {
