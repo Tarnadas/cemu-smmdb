@@ -28,11 +28,33 @@ export function smmdbResult (smmdb) {
 }
 
 export function downloadCourse (courseId, courseName, ownerName) {
-    "use strict";
     return {
         type: 'DOWNLOAD_COURSE',
         courseId,
         courseName,
         ownerName
+    }
+}
+
+export function startDownloadCourse (courseId, dataLength) {
+    return {
+        type: 'START_DOWNLOAD_COURSE',
+        courseId,
+        dataLength
+    }
+}
+
+export function progressDownloadCourse (courseId, dataLength) {
+    return {
+        type: 'PROGRESS_DOWNLOAD_COURSE',
+        courseId,
+        dataLength
+    }
+}
+
+export function finishDownloadCourse (courseId) {
+    return {
+        type: 'FINISH_DOWNLOAD_COURSE',
+        courseId
     }
 }

@@ -29,7 +29,8 @@ export default class SaveFileDetails extends React.Component {
                     color: '#fff',
                     fontSize: '18px',
                     display: 'inline-block',
-                    margin: '0 10px'
+                    margin: '0 10px',
+                    whiteSpace: 'nowrap'
                 },
                 cancel: {
                     float: 'right',
@@ -74,7 +75,7 @@ export default class SaveFileDetails extends React.Component {
                         {`${this.props.course.title} by ${this.props.course.maker}`}
                     </div>
                     <div style={styles.cancel} onClick={this.props.onClick}>
-                        <img style={styles.cancelImg} src="../assets/images/cancel.svg" />
+                        <img style={styles.cancelImg} src="./assets/images/cancel.svg" />
                     </div>
                     <div style={styles.line} />
                     <div style={styles.body}>

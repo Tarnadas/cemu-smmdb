@@ -9,7 +9,7 @@ module.exports = [
         },
         output: {
             filename: '[name].bundle.js',
-            path: path.join(__dirname, 'gui'),
+            path: path.join(__dirname, 'build'),
             //sourceMapFilename: '[name].map'
         },
         module: {
@@ -40,6 +40,7 @@ module.exports = [
         entry: path.join(__dirname, 'main.js'),
         output: {
             filename: '[name].bundle.js',
+            path: path.join(__dirname, 'build'),
             //sourceMapFilename: '[name].map'
         },
         node: {

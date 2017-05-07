@@ -32,7 +32,7 @@ const BrowserWindow = electron.BrowserWindow;
             icon: path.join(__dirname, 'assets/images/icon.png')
         });
 
-        mainWindow.loadURL(`file://${__dirname}/gui/index.html`);
+        mainWindow.loadURL(`file://${__dirname}/index.html`);
 
         if (process.env.NODE_ENV === 'development') {
             mainWindow.webContents.openDevTools();

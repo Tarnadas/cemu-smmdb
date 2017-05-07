@@ -20,7 +20,7 @@ export default class LoadSaveView extends React.Component {
         return (
             !this.props.save || this.props.save.length === 0 ? (
                 <div style={styles.center}>
-                    <InteractiveButton type="addSave" value="Please select your Cemu SMM folder" />
+                    <InteractiveButton type="addSave" isFLoat value="Please select your Cemu SMM folder" />
                 </div>
             ) : (
                 <div style={styles.center}>
@@ -28,7 +28,7 @@ export default class LoadSaveView extends React.Component {
                         Array.from((function*() {
                             for (let i = 0; i < self.props.save.length; i++) {
                                 yield (
-                                    <InteractiveButton type="loadSave" cancelable value={(() => {
+                                    <InteractiveButton type="loadSave" cancelable isFloat value={(() => {
                                         let savePath = self.props.save[i];
                                         let split = savePath.split("\\");
                                         return `Load ${split[split.length - 4]} ${split[split.length - 1]}`;
@@ -37,7 +37,7 @@ export default class LoadSaveView extends React.Component {
                             }
                         })())
                     }
-                    <InteractiveButton type="addSave" value="Load another Cemu SMM folder" />
+                    <InteractiveButton type="addSave" isFloat value="Load another Cemu SMM folder" />
                 </div>
             )
         );

@@ -59,7 +59,8 @@ export default class SmmdbFileDetails extends React.Component {
                     color: '#fff',
                     fontSize: '18px',
                     display: 'inline-block',
-                    margin: '0 10px'
+                    margin: '0 10px',
+                    whiteSpace: 'nowrap'
                 },
                 cancel: {
                     float: 'right',
@@ -80,6 +81,8 @@ export default class SmmdbFileDetails extends React.Component {
                 },
                 bodyImgDiv: {
                     display: 'inline-block',
+                    verticalAlign: 'top',
+                    //display: 'table-cell',
                     margin: '20px',
                     width: '320px',
                     height: '240px',
@@ -92,7 +95,12 @@ export default class SmmdbFileDetails extends React.Component {
                 },
                 navigation: {
                     display: 'inline-block',
-                    textAlign: 'center'
+                    verticalAlign: 'top',
+                    //display: 'table-cell',
+                    textAlign: 'center',
+                    height: '240px',
+                    margin: '20px',
+                    width: 'calc(100% - 400px)'
                 },
                 footer: {
                     margin: '20px',
@@ -114,14 +122,14 @@ export default class SmmdbFileDetails extends React.Component {
                         {`${this.props.course.title} by ${this.props.course.ownername}`}
                     </div>
                     <div style={styles.cancel} onClick={this.props.onClick}>
-                        <img style={styles.cancelImg} src="../assets/images/cancel.svg" />
+                        <img style={styles.cancelImg} src="./assets/images/cancel.svg" />
                     </div>
                     <div style={styles.line} />
                     <div style={styles.body}>
                         {
                             this.state.error ? (
                                 <div style={styles.bodyImgDiv}>
-                                    <img style={styles.bodyImg} src={'../assets/images/icon_large.png'} />
+                                    <img style={styles.bodyImg} src={'./assets/images/icon_large.png'} />
                                 </div>
                             ) : (
                                 !!this.props.course.videoid ? (
@@ -141,7 +149,7 @@ export default class SmmdbFileDetails extends React.Component {
                     <div style={styles.footer}>
                         <img onError={this.onErrorThumbnail} style={styles.footerImg} src={
                             this.state.errorThumbnail ? (
-                                '../assets/images/not_found.png'
+                                './assets/images/not_found.png'
                             ) : (
                                 `http://smmdb.ddns.net/img/courses/thumbnails/${this.props.course.id}.pic`
                             )

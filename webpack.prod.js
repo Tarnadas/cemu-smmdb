@@ -9,7 +9,7 @@ module.exports = [
         },
         output: {
             filename: '[name].bundle.js',
-            path: path.join(__dirname, 'gui')
+            path: path.join(__dirname, 'build')
         },
         module: {
             loaders: [
@@ -28,10 +28,10 @@ module.exports = [
             ]
         },
         plugins: [
-            new webpack.LoaderOptionsPlugin({
-                minimize: true,
-                debug: false
-            }),
+            //new webpack.LoaderOptionsPlugin({
+            //    minimize: true,
+            //    debug: false
+            //}),
             new webpack.optimize.UglifyJsPlugin({
                 beautify: false,
                 mangle: {
@@ -49,7 +49,8 @@ module.exports = [
         target: "electron",
         entry: ["babel-polyfill", path.join(__dirname, 'main.js')],
         output: {
-            filename: '[name].bundle.js'
+            filename: '[name].bundle.js',
+            path: path.join(__dirname, 'build'),
         },
         node: {
             __dirname: false,
@@ -68,10 +69,10 @@ module.exports = [
             ]
         },
         plugins: [
-            new webpack.LoaderOptionsPlugin({
-                minimize: true,
-                debug: false
-            }),
+            //new webpack.LoaderOptionsPlugin({
+            //    minimize: true,
+            //    debug: false
+            //}),
             new webpack.optimize.UglifyJsPlugin({
                 beautify: false,
                 mangle: {
@@ -83,39 +84,3 @@ module.exports = [
         ]
     }
 ];
-
-/*module.exports = {
-    target: "electron",
-    entry: path.join(__dirname, 'main.js'),
-    output: {
-        filename: '[name].bundle.js',
-        sourceMapFilename: '[name].map'
-    },
-    node: {
-        __dirname: false,
-        __filename: false
-    },
-    module: {
-        loaders: [{
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader'
-        }]
-    },
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('production')
-        }),
-        new webpack.LoaderOptionsPlugin({
-            minimize: true,
-            debug: false
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            beautify: false,
-            mangle: {
-                keep_fnames: true
-            },
-            comments: false
-        })
-    ]
-};*/

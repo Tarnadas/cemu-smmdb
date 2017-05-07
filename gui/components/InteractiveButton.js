@@ -84,12 +84,10 @@ class InteractiveButton extends React.Component {
             'default': {
                 button: {
                     display: 'inline-block',
-                    float: 'left',
-                    clear: 'both',
-                    margin: '10px auto',
-                    width: '100%',
+                    margin: '0 auto 10px auto',
                     padding: '0 10px',
                     height: '40px',
+                    width: '100%',
                     lineHeight: '40px',
                     backgroundColor: '#ffe500',
                     color: '#323245',
@@ -103,10 +101,45 @@ class InteractiveButton extends React.Component {
                 },
                 buttonHover: {
                     display: 'inline-block',
+                    margin: '0 auto 10px auto',
+                    padding: '0 10px',
+                    height: '40px',
+                    width: '100%',
+                    lineHeight: '40px',
+                    backgroundColor: '#323245',
+                    color: '#fff',
+                    outline: 'none',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    boxSizing: 'border-box',
+                    border: '0px solid #000000',
+                    borderRadius: '5px',
+                    boxShadow: '1px 4px 13px 0px rgba(0,0,0,0.5)',
+                    cursor: 'context-menu'
+                },
+                buttonFloat: {
+                    display: 'inline-block',
                     float: 'left',
                     clear: 'both',
                     margin: '10px auto',
-                    width: '100%',
+                    padding: '0 10px',
+                    height: '40px',
+                    lineHeight: '40px',
+                    backgroundColor: '#ffe500',
+                    color: '#323245',
+                    outline: 'none',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    boxSizing: 'border-box',
+                    border: '0px solid #000000',
+                    borderRadius: '5px',
+                    boxShadow: '1px 4px 13px 0px rgba(0,0,0,0.5)'
+                },
+                buttonFloatHover: {
+                    display: 'inline-block',
+                    float: 'left',
+                    clear: 'both',
+                    margin: '10px auto',
                     padding: '0 10px',
                     height: '40px',
                     lineHeight: '40px',
@@ -142,12 +175,18 @@ class InteractiveButton extends React.Component {
             },
         });
         return (
-            <div style={this.state.hover ? styles.buttonHover : styles.button} onClick={this.handleClick} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
+            <div style={
+                this.props.isFloat ? (
+                    this.state.hover ? styles.buttonFloatHover : styles.buttonFloat
+                ) : (
+                    this.state.hover ? styles.buttonHover : styles.button
+                )
+            } onClick={this.handleClick} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
                 {this.props.value}
                 {
                     this.props.cancelable && (
                         <div style={styles.cancel} onClick={this.removeSave}>
-                            <img style={styles.cancelImg} src="../assets/images/cancel_yellow.svg" />
+                            <img style={styles.cancelImg} src="./assets/images/cancel_yellow.svg" />
                         </div>
                     )
                 }

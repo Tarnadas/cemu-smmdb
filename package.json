@@ -2,10 +2,10 @@
   "name": "cemu-smmdb",
   "version": "1.0.0",
   "description": "Super Mario Maker Save File Editor",
-  "main": "main.bundle.js",
+  "main": "./main.bundle.js",
   "scripts": {
-    "start": "set NODE_ENV=development&& webpack --env=dev && electron .",
-    "build": "set NODE_ENV=production&& webpack --env=prod && electron-packager . --overwrite"
+    "start": "set NODE_ENV=development&& webpack --env=dev && electron ./build/main.bundle.js",
+    "build": "set NODE_ENV=production&& webpack --env=prod && node build"
   },
   "repository": "https://github.com/Tarnadas/cemu-smmdb",
   "keywords": [
@@ -37,10 +37,9 @@
     "webpack": "^2.4.1"
   },
   "dependencies": {
-    "@fknop/node-unrar": "^1.1.0",
     "adm-zip": "^0.4.7",
     "bluebird": "^3.5.0",
-    "cemu-smm": "^1.1.7",
+    "cemu-smm": "^1.1.16",
     "cross-unzip": "^0.2.1",
     "electron-log": "^2.2.3",
     "file-type": "^4.2.0",
@@ -56,6 +55,7 @@
     "redux": "^3.6.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.0",
+    "rimraf": "^2.6.1",
     "win-7zip": "^0.1.1"
   }
 }

@@ -1,13 +1,11 @@
-import { fromJS, List } from 'immutable';
+import { fromJS, List, Map } from 'immutable';
 import { remote } from 'electron';
 
 import fs from 'fs';
 import path from 'path';
 
-import CourseDownloader from '../util/CourseDownloader';
-
 export default function mainApp (state, action) {
-    let appSaveData, cemuSavePath;
+    let appSaveData, cemuSavePath, currentDownload, currentDownloads;
     switch (action.type) {
         case 'ADD_SAVE':
             appSaveData = state.get('appSaveData');
@@ -43,12 +41,33 @@ export default function mainApp (state, action) {
         case 'SMMDB_RESULT':
             state = state.set('smmdb', action.smmdb);
             return state;
-        case 'DOWNLOAD_COURSE':
-            new CourseDownloader(action.courseId, action.courseName, action.ownerName, state.get('appSavePath'));
+        case 'START_DOWNLOAD_COURSE':
+            currentDownloads = state.get('currentDownloads');
+            if (!currentDownloads) {
+                currentDownloads = Map();
+            }
+            currentDownloads = currentDownloads.set(+action.courseId, List([0,action.dataLength]));
+            state = state.set('currentDownloads', currentDownloads);
             return state;
-        default:
+        case 'PROGRESS_DOWNLOAD_COURSE':
+            currentDownloads = state.get('currentDownloads');
+            currentDownload = currentDownloads.get(+action.courseId);
+            currentDownload = currentDownload.set(0, currentDownload.get(0) + action.dataLength);
+            currentDownloads = currentDownloads.set(+action.courseId, currentDownload);
+            state = state.set('currentDownloads', currentDownloads);
+            //console.log(state);
+            return state;
+        case 'FINISH_DOWNLOAD_COURSE':
+            currentDownloads = state.get('currentDownloads');
+            currentDownload = currentDownloads.get(+action.courseId);
+            currentDownload = currentDownload.set(0, currentDownload.get(1));
+            currentDownloads = currentDownloads.set(+action.courseId, currentDownload);
+            state = state.set('currentDownloads', currentDownloads);
+            return state;
+        case '@@redux/INIT':
             let save = remote.getGlobal('save');
             return fromJS(save);
 
     }
+    return state;
 };

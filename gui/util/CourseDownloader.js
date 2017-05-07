@@ -5,8 +5,9 @@ import fileType from 'file-type';
 import readChunk from 'read-chunk';
 import AdmZip from 'adm-zip';
 import Unrar from 'node-unrar';
-import {unzip} from 'cross-unzip';
+import { unzip } from 'cross-unzip';
 import mv from 'mv';
+import rimraf from 'rimraf';
 
 let throttledRequest = throttle(request);
 throttledRequest.configure({
@@ -18,17 +19,20 @@ import fs from 'fs';
 import path from 'path';
 
 export default class CourseDownloader {
-    constructor (courseId, courseName, ownerName, appSavePath) {
-        if (!fs.existsSync(path.join(appSavePath, 'temp'))){
-            fs.mkdirSync(path.join(appSavePath, 'temp'));
+    constructor (appSavePath) {
+        this.appSavePath = appSavePath;
+    }
+    download (onStart, onProgress, onFinish, courseId, courseName, ownerName) {
+        if (!fs.existsSync(path.join(this.appSavePath, 'temp'))){
+            fs.mkdirSync(path.join(this.appSavePath, 'temp'));
         }
-        if (!fs.existsSync(path.join(appSavePath, 'downloads'))){
-            fs.mkdirSync(path.join(appSavePath, 'downloads'));
+        if (!fs.existsSync(path.join(this.appSavePath, 'downloads'))){
+            fs.mkdirSync(path.join(this.appSavePath, 'downloads'));
         }
 
         let courseUrl = `http://smmdb.ddns.net/courses/${courseId}`;
-        this.filePathTemp = path.join(appSavePath, `temp/${courseId}`);
-        this.filePath = path.join(appSavePath, `downloads/${courseId}`);
+        this.filePathTemp = path.join(this.appSavePath, `temp/${courseId}`);
+        this.filePath = path.join(this.appSavePath, `downloads/${courseId}`);
         this.stream = fs.createWriteStream(this.filePathTemp);
 
         this.req = throttledRequest({
@@ -38,23 +42,31 @@ export default class CourseDownloader {
         this.req.pipe(this.stream);
 
         this.req.on('response', (data) => {
-            //console.log("length: " + data.headers['content-length']);
+            onStart(courseId, parseInt(data.headers['content-length']));
         });
 
         this.req.on('data', (chunk) => {
-            //console.log("chunk received: " + chunk.length);
+            onProgress(courseId, chunk.length);
         });
 
         this.req.on('end', async () => {
             let mime = fileType(readChunk.sync(this.filePathTemp, 0, 4100)).mime;
             if (mime === 'application/x-rar-compressed') {
 
-                fs.renameSync(this.filePathTemp, path.join(appSavePath, `temp/${courseId}.rar`));
-                this.filePathTemp = path.join(appSavePath, `temp/${courseId}.rar`);
-                let rar = new Unrar(this.filePathTemp);
-                if (!fs.existsSync(this.filePath)){
-                    fs.mkdirSync(this.filePath);
+                let rarName = path.join(this.appSavePath, `temp/${courseId}.rar`);
+                if (fs.existsSync(rarName)) {
+                    fs.unlinkSync(rarName);
                 }
+                fs.renameSync(this.filePathTemp, rarName);
+                this.filePathTemp = rarName;
+                await new Promise((resolve) => {
+                    rimraf(this.filePath, () => {
+                        fs.mkdirSync(this.filePath);
+                        resolve();
+                    })
+                });
+
+                let rar = new Unrar(this.filePathTemp);
                 rar.extract(this.filePath, null, (err) => {
                     if (err) console.log(err);
                     fs.unlink(this.filePathTemp, () => {});
@@ -79,12 +91,19 @@ export default class CourseDownloader {
                                     resolve();
                                 });
                             });
-                            fs.rmdir(mvFilePath);
+                            fs.rmdir(mvFilePath, () => {});
                         }
                     })
                 });
 
             } else if (mime === 'application/zip') {
+
+                await new Promise((resolve) => {
+                    rimraf(this.filePath, () => {
+                        fs.mkdirSync(this.filePath);
+                        resolve();
+                    })
+                });
 
                 // uncompress and delete temp file
                 let zip = new AdmZip(this.filePathTemp);
@@ -111,18 +130,25 @@ export default class CourseDownloader {
                                 resolve();
                             });
                         });
-                        fs.rmdir(mvFilePath);
+                        fs.rmdir(mvFilePath, () => {});
                     }
                 })
 
             } else if (mime === 'application/x-7z-compressed') {
 
-                if (!fs.existsSync(this.filePath)){
-                    fs.mkdirSync(this.filePath);
-                }
-                unzip(this.filePathTemp, this.filePath, (err) => {
-                    if (err) console.log(err);
-                    fs.unlink(this.filePathTemp, () => {});
+                await new Promise((resolve) => {
+                    rimraf(this.filePath, () => {
+                        fs.mkdirSync(this.filePath);
+                        resolve();
+                    })
+                });
+
+                await new Promise((resolve) => {
+                    unzip(this.filePathTemp, this.filePath, (err) => {
+                        if (err) console.log(err);
+                        fs.unlink(this.filePathTemp, () => {});
+                        resolve();
+                    });
                 });
 
                 // move files to proper directory
@@ -145,13 +171,14 @@ export default class CourseDownloader {
                                 resolve();
                             });
                         });
-                        fs.rmdir(mvFilePath);
+                        fs.rmdir(mvFilePath, () => {});
                     }
                 })
 
             } else {
                 console.log("Could not decompress file. Unknown format! " + mime)
             }
+            onFinish(courseId);
         });
     }
 }

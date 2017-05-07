@@ -63,7 +63,7 @@ export default class ChangeViewButton extends React.Component {
                 </div>
                 <div style={styles.divImg}>
                     <div style={styles.divImgInner}>
-                        <img style={styles.img} src='../assets/images/arrow_down.svg' />
+                        <img style={styles.img} src='./assets/images/arrow_down.svg' />
                     </div>
                 </div>
             </div>

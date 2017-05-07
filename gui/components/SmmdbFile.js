@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactCSS from 'reactcss';
 
-export default class SaveFile extends React.Component {
+export default class SmmdbFile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -91,7 +91,7 @@ export default class SaveFile extends React.Component {
                 <div style={styles.divCrop}>
                     <img style={styles.img} onError={this.onError} src={
                         this.state.error ? (
-                            !this.props.course.videoid ? '../assets/images/icon_large.png' : `https://img.youtube.com/vi/${this.props.course.videoid}/0.jpg`
+                            !this.props.course.videoid ? './assets/images/icon_large.png' : `https://img.youtube.com/vi/${this.props.course.videoid}/0.jpg`
                         ) : (
                             `http://smmdb.ddns.net/img/courses/thumbnails/${this.props.course.id}.pic`
                         )

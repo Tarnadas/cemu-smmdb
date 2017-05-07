@@ -50,15 +50,32 @@ class SmmdbView extends React.Component {
             },
         });
         let self = this;
+        let currentDownloads = this.props.currentDownloads;
+        let progresses = {};
+        if (!!currentDownloads && !!this.props.courses) {
+            currentDownloads = currentDownloads.toJS();
+            for (let i = 0; i < this.props.order.length; i++) {
+                let course = this.props.courses[this.props.order[i]];
+                let progress;
+                if (!!currentDownloads[+course.id]) {
+                    progress = currentDownloads[+course.id][0] / currentDownloads[+course.id][1];
+                    progresses[+course.id] = progress;
+                }
+            }
+        }
         return (
             <div style={styles.div}>
-                <SmmdbFileDetails course={this.state.course} onClick={this.hideSaveDetails} />
+                <SmmdbFileDetails course={this.state.course} onClick={this.hideSaveDetails} progress={
+                    !!this.state.course && !!progresses[+this.state.course.id] && progresses[+this.state.course.id]
+                } />
                 <ul style={styles.ul}>
                     {
                         Array.from((function* () {
                             for (let i = 0; i < self.props.order.length; i++) {
                                 let course = self.props.courses[self.props.order[i]];
-                                yield <SmmdbFile onClick={self.showSaveDetails} course={course} key={course.id} />
+                                yield <SmmdbFile onClick={self.showSaveDetails} course={course} progress={
+                                    !!self.state.course && !!progresses[+course.id] && progresses[+course.id]
+                                } key={course.id} />
                             }
                         })())
                     }
@@ -68,6 +85,14 @@ class SmmdbView extends React.Component {
     }
 }
 export default connect((state) => {
+    let currentDownloads = state.get('currentDownloads');
+    if (!!currentDownloads) {
+        return {
+            courses: state.get('smmdb').courses,
+            order: state.get('smmdb').order,
+            currentDownloads
+        }
+    }
     return {
         courses: state.get('smmdb').courses,
         order: state.get('smmdb').order
