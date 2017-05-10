@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactCSS from 'reactcss';
+import { connect } from 'react-redux';
 import { remote } from 'electron';
 
 import SaveFile from "./SaveFile";
 import SaveFileDetails from "./SaveFileDetails";
 
-export default class SaveFolderView extends React.Component {
+class SaveFolderView extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
@@ -28,8 +29,20 @@ export default class SaveFolderView extends React.Component {
             course: null
         })
     }
+    componentWillReceiveProps (nextProps) {
+        if (!!this.state.course && !nextProps.courses[`course${this.state.course.id.pad(3)}`]) {
+            this.setState({
+                course: null
+            })
+        }
+    }
+    componentWillMount () {
+        if (!!this.props.save) {
+            this.props.downloader.setCemuSave(this.props.save);
+        }
+    }
     render () {
-        const courses = this.props.save.courses;
+        const courses = this.props.courses;
         const styles = ReactCSS({
             'default': {
                 div: {
@@ -69,6 +82,13 @@ export default class SaveFolderView extends React.Component {
         )
     }
 }
+export default connect((state) => {
+    return {
+        //save: !!state.get('cemuSave') ? state.get('cemuSave').toJS() : null
+        save: state.get('cemuSave'),
+        courses: JSON.parse(JSON.stringify(state.get('cemuSave').courses))
+    };
+})(SaveFolderView);
 
 Number.prototype.pad = function(size) {
     let s = String(this);

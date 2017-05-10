@@ -54,13 +54,15 @@ export default class SmmdbFileDetails extends React.Component {
                     backgroundColor: '#00452a'
                 },
                 header: {
+                    maxWidth: '700px',
                     height: '40px',
                     lineHeight: '40px',
                     color: '#fff',
                     fontSize: '18px',
                     display: 'inline-block',
                     margin: '0 10px',
-                    whiteSpace: 'nowrap'
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden'
                 },
                 cancel: {
                     float: 'right',
@@ -112,7 +114,7 @@ export default class SmmdbFileDetails extends React.Component {
                 footerImg: {
                     width: 'auto',
                     height: '81px'
-                },
+                }
             },
         });
         return (
@@ -142,7 +144,8 @@ export default class SmmdbFileDetails extends React.Component {
                             )
                         }
                         <div style={styles.navigation}>
-                            <InteractiveButton type="downloadCourse" value="Download" courseId={this.props.course.id} courseName={this.props.course.title} ownerName={this.props.course.ownername} />
+                            <InteractiveButton type="downloadCourse" value="Download" progress={this.props.progress} complete={this.props.isDownloaded} courseId={this.props.course.id} courseName={this.props.course.title} ownerName={this.props.course.ownername} videoId={this.props.course.videoid} />
+                            <InteractiveButton type="addCourse" value="Add Course to Save" progress={this.props.progressAdd} courseId={this.props.course.id} isDownloaded={this.props.isDownloaded} isAdded={this.props.isAdded} />
                         </div>
                     </div>
                     <div style={styles.line} />

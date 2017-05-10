@@ -11,11 +11,12 @@ import CourseDownloader from './util/CourseDownloader';
 
 (async () => {
     const save = remote.getGlobal('save');
-    const store = createStore(mainApp, applyMiddleware(downloaderMiddleware(new CourseDownloader(save.appSavePath))));
+    const courseDownloader = new CourseDownloader(save.appSavePath);
+    const store = createStore(mainApp, applyMiddleware(downloaderMiddleware(courseDownloader)));
 
     ReactDOM.render(
         <Provider store={store}>
-            <AppView />
+            <AppView downloader={courseDownloader} />
         </Provider>,
         document.getElementById('root')
     );

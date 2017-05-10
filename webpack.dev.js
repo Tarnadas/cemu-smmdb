@@ -9,9 +9,9 @@ module.exports = [
         },
         output: {
             filename: '[name].bundle.js',
-            path: path.join(__dirname, 'build'),
-            //sourceMapFilename: '[name].map'
+            path: path.join(__dirname, 'build')
         },
+        devtool: 'inline-source-map',
         module: {
             loaders: [
                 {
@@ -40,9 +40,9 @@ module.exports = [
         entry: path.join(__dirname, 'main.js'),
         output: {
             filename: '[name].bundle.js',
-            path: path.join(__dirname, 'build'),
-            //sourceMapFilename: '[name].map'
+            path: path.join(__dirname, 'build')
         },
+        devtool: 'inline-source-map',
         node: {
             __dirname: false,
             __filename: false

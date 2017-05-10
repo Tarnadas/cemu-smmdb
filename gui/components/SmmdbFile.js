@@ -33,6 +33,7 @@ export default class SmmdbFile extends React.Component {
         this.props.onClick(this.props.course)
     }
     render() {
+        const progress = !!this.props.progress ? this.props.progress*100 : 0;
         const styles = ReactCSS({
             'default': {
                 li: {
@@ -40,7 +41,7 @@ export default class SmmdbFile extends React.Component {
                     margin: '20px 0 0 20px',
                     width: '180px',
                     height: '160px',
-                    backgroundColor: '#a0a0af',
+                    background: `linear-gradient(90deg, #99ff66 ${progress}%, #a0a0af ${progress}%)`,
                     color: '#fff',
                     overflow: 'hidden',
                     cursor: 'pointer'

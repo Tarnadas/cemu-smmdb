@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 
 export default function mainApp (state, action) {
-    let appSaveData, cemuSavePath, currentDownload, currentDownloads;
+    let appSaveData, cemuSavePath, currentDownload, currentDownloads, downloads, addedToSave;
     switch (action.type) {
         case 'ADD_SAVE':
             appSaveData = state.get('appSaveData');
@@ -55,7 +55,6 @@ export default function mainApp (state, action) {
             currentDownload = currentDownload.set(0, currentDownload.get(0) + action.dataLength);
             currentDownloads = currentDownloads.set(+action.courseId, currentDownload);
             state = state.set('currentDownloads', currentDownloads);
-            //console.log(state);
             return state;
         case 'FINISH_DOWNLOAD_COURSE':
             currentDownloads = state.get('currentDownloads');
@@ -63,6 +62,27 @@ export default function mainApp (state, action) {
             currentDownload = currentDownload.set(0, currentDownload.get(1));
             currentDownloads = currentDownloads.set(+action.courseId, currentDownload);
             state = state.set('currentDownloads', currentDownloads);
+            downloads = state.get('downloads');
+            if (!downloads) {
+                downloads = List();
+            }
+            downloads = downloads.push(action.courseId);
+            state = state.set('downloads', downloads);
+            return state;
+        case 'FINISH_ADD_COURSE':
+            addedToSave = state.get('addedToSave');
+            if (!addedToSave) {
+                addedToSave = List();
+            }
+            addedToSave = addedToSave.push(action.courseId);
+            state = state.set('addedToSave', addedToSave);
+            state = state.set('cemuSave', action.cemuSave);
+            return state;
+        case 'FINISH_DELETE_COURSE':
+            if (state.has('cemuSave')) {
+                state = state.delete('cemuSave');
+            }
+            state = state.set('cemuSave', action.cemuSave);
             return state;
         case '@@redux/INIT':
             let save = remote.getGlobal('save');

@@ -42,7 +42,7 @@ class MainView extends React.Component {
                 return (
                     <div>
                         <ChangeViewButton onClick={this.handleClick} view={this.state.currentView} />
-                        <SaveFolderView save={this.props.save} />
+                        <SaveFolderView downloader={this.props.downloader} />
                         <MainMenu />
                     </div>
                 );

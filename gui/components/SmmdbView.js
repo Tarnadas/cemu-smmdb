@@ -28,12 +28,9 @@ class SmmdbView extends React.Component {
         const styles = ReactCSS({
             'default': {
                 div: {
-                    //display: 'flex',
-                    //alignItems: 'center',
                     width: '100%',
                     height: '100vh',
                     minHeight: '100vh',
-                    //backgroundColor: '#f4f47b'
                 },
                 ul: {
                     margin: 'auto',
@@ -53,7 +50,6 @@ class SmmdbView extends React.Component {
         let currentDownloads = this.props.currentDownloads;
         let progresses = {};
         if (!!currentDownloads && !!this.props.courses) {
-            currentDownloads = currentDownloads.toJS();
             for (let i = 0; i < this.props.order.length; i++) {
                 let course = this.props.courses[this.props.order[i]];
                 let progress;
@@ -66,7 +62,11 @@ class SmmdbView extends React.Component {
         return (
             <div style={styles.div}>
                 <SmmdbFileDetails course={this.state.course} onClick={this.hideSaveDetails} progress={
-                    !!this.state.course && !!progresses[+this.state.course.id] && progresses[+this.state.course.id]
+                    !!this.state.course && !!progresses[+this.state.course.id] ? progresses[+this.state.course.id] : null
+                } isDownloaded={
+                    !!this.state.course && !!this.props.downloads && this.props.downloads.includes(this.state.course.id)
+                } isAdded={
+                    !!this.state.course && !!this.props.addedToSave && this.props.addedToSave.includes(this.state.course.id)
                 } />
                 <ul style={styles.ul}>
                     {
@@ -74,7 +74,11 @@ class SmmdbView extends React.Component {
                             for (let i = 0; i < self.props.order.length; i++) {
                                 let course = self.props.courses[self.props.order[i]];
                                 yield <SmmdbFile onClick={self.showSaveDetails} course={course} progress={
-                                    !!self.state.course && !!progresses[+course.id] && progresses[+course.id]
+                                    !!progresses[+course.id] && progresses[+course.id]
+                                } isDownloaded={
+                                    !!self.props.downloads && self.props.downloads.includes(course.id)
+                                } isAdded={
+                                    !!self.props.addedToSave && self.props.addedToSave.includes(course.id)
                                 } key={course.id} />
                             }
                         })())
@@ -86,15 +90,13 @@ class SmmdbView extends React.Component {
 }
 export default connect((state) => {
     let currentDownloads = state.get('currentDownloads');
-    if (!!currentDownloads) {
-        return {
-            courses: state.get('smmdb').courses,
-            order: state.get('smmdb').order,
-            currentDownloads
-        }
-    }
+    let downloads = state.get('downloads');
+    let addedToSave = state.get('addedToSave');
     return {
         courses: state.get('smmdb').courses,
-        order: state.get('smmdb').order
+        order: state.get('smmdb').order,
+        currentDownloads: !!currentDownloads ? currentDownloads.toJS() : null,
+        downloads: !!downloads ? downloads.toJS() : null,
+        addedToSave: !!addedToSave ? addedToSave.toJS() : null
     }
 })(SmmdbView);

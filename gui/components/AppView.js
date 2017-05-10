@@ -13,7 +13,7 @@ class AppView extends React.Component {
                 </div>
             ) : (
                 <div>
-                    <MainView save={this.props.cemuSave} />
+                    <MainView downloader={this.props.downloader} />
                 </div>
             )
         )

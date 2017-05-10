@@ -1,4 +1,4 @@
-import { startDownloadCourse, progressDownloadCourse, finishDownloadCourse } from '../actions';
+import { startDownloadCourse, progressDownloadCourse, finishDownloadCourse, finishAddCourse, finishDeleteCourse } from '../actions';
 
 export default function downloaderMiddleware (courseDownloader) {
     return ({ dispatch, getState }) => next => action => {
@@ -11,9 +11,21 @@ export default function downloaderMiddleware (courseDownloader) {
         let onFinish = (courseId) => {
             dispatch(finishDownloadCourse(courseId));
         };
+        let onAddFinish = (cemuSave, courseId, success) => {
+            dispatch(finishAddCourse(cemuSave, courseId, success));
+        };
+        let onDeleteFinish = (cemuSave, courseId, success) => {
+            dispatch(finishDeleteCourse(cemuSave, courseId, success));
+        };
         switch (action.type) {
             case 'DOWNLOAD_COURSE':
-                courseDownloader.download(onStart, onProgress, onFinish, action.courseId, action.courseName, action.ownerName, getState().get('appSavePath'));
+                courseDownloader.download(onStart, onProgress, onFinish, action.courseId, action.courseName, action.ownerName, action.videoId);
+                break;
+            case 'ADD_COURSE':
+                courseDownloader.add(onAddFinish, action.courseId);
+                break;
+            case 'DELETE_COURSE':
+                courseDownloader.delete(onDeleteFinish, action.courseId);
                 break;
         }
         return next(action);

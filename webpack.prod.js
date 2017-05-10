@@ -1,11 +1,12 @@
 const webpack = require('webpack');
 const path    = require('path');
+const BabiliPlugin = require('babili-webpack-plugin');
 
 module.exports = [
     {
         target: "electron",
         entry: {
-            "renderer": ["babel-polyfill", path.join(__dirname, 'gui/renderer.js')]
+            "renderer": path.join(__dirname, 'gui/renderer.js')
         },
         output: {
             filename: '[name].bundle.js',
@@ -18,7 +19,7 @@ module.exports = [
                     exclude: /node_modules/,
                     loader: 'babel-loader',
                     query: {
-                        plugins: ["transform-react-jsx", "transform-es2015-arrow-functions", "transform-async-to-generator"]
+                        plugins: ["transform-react-jsx"]
                     }
                 },
                 {
@@ -28,26 +29,16 @@ module.exports = [
             ]
         },
         plugins: [
-            //new webpack.LoaderOptionsPlugin({
-            //    minimize: true,
-            //    debug: false
-            //}),
-            new webpack.optimize.UglifyJsPlugin({
-                beautify: false,
-                mangle: {
-                    keep_fnames: true
-                },
-                comments: false
-            }),
             new webpack.EnvironmentPlugin('NODE_ENV'),
             new webpack.DefinePlugin({
                 __dirname: '__dirname',
-            })
+            }),
+            new BabiliPlugin()
         ]
     },
     {
         target: "electron",
-        entry: ["babel-polyfill", path.join(__dirname, 'main.js')],
+        entry: path.join(__dirname, 'main.js'),
         output: {
             filename: '[name].bundle.js',
             path: path.join(__dirname, 'build'),
@@ -56,31 +47,9 @@ module.exports = [
             __dirname: false,
             __filename: false
         },
-        module: {
-            loaders: [
-                {
-                    test: /\.js$/,
-                    exclude: /node_modules/,
-                    loader: 'babel-loader',
-                    query: {
-                        plugins: ["transform-es2015-arrow-functions", "transform-async-to-generator"]
-                    }
-                }
-            ]
-        },
         plugins: [
-            //new webpack.LoaderOptionsPlugin({
-            //    minimize: true,
-            //    debug: false
-            //}),
-            new webpack.optimize.UglifyJsPlugin({
-                beautify: false,
-                mangle: {
-                    keep_fnames: true
-                },
-                comments: false
-            }),
-            new webpack.EnvironmentPlugin('NODE_ENV')
+            new webpack.EnvironmentPlugin('NODE_ENV'),
+            new BabiliPlugin()
         ]
     }
 ];

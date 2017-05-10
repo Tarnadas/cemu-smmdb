@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactCSS from 'reactcss';
 
+import InteractiveButton from './InteractiveButton';
+
 export default class SaveFileDetails extends React.Component {
     render() {
         const styles = ReactCSS({
@@ -55,6 +57,15 @@ export default class SaveFileDetails extends React.Component {
                     width: '320px',
                     height: '240px'
                 },
+                navigation: {
+                    display: 'inline-block',
+                    verticalAlign: 'top',
+                    //display: 'table-cell',
+                    textAlign: 'center',
+                    height: '240px',
+                    margin: '20px',
+                    width: 'calc(100% - 400px)'
+                },
                 footer: {
                     margin: '20px',
                     width: '720px',
@@ -80,7 +91,9 @@ export default class SaveFileDetails extends React.Component {
                     <div style={styles.line} />
                     <div style={styles.body}>
                         <img style={styles.bodyImg} src={`${this.props.course.path}/thumbnail1.jpg`} />
-
+                        <div style={styles.navigation}>
+                            <InteractiveButton type="deleteCourse" value="Delete" courseId={this.props.course.id} />
+                        </div>
                     </div>
                     <div style={styles.line} />
                     <div style={styles.footer}>

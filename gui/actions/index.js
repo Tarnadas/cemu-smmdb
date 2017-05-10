@@ -27,12 +27,13 @@ export function smmdbResult (smmdb) {
     }
 }
 
-export function downloadCourse (courseId, courseName, ownerName) {
+export function downloadCourse (courseId, courseName, ownerName, videoId) {
     return {
         type: 'DOWNLOAD_COURSE',
         courseId,
         courseName,
-        ownerName
+        ownerName,
+        videoId
     }
 }
 
@@ -56,5 +57,37 @@ export function finishDownloadCourse (courseId) {
     return {
         type: 'FINISH_DOWNLOAD_COURSE',
         courseId
+    }
+}
+
+export function addCourse (courseId) {
+    return {
+        type: 'ADD_COURSE',
+        courseId
+    }
+}
+
+export function finishAddCourse (cemuSave, courseId, success) {
+    return {
+        type: 'FINISH_ADD_COURSE',
+        cemuSave,
+        courseId,
+        success
+    }
+}
+
+export function deleteCourse (courseId) {
+    return {
+        type: 'DELETE_COURSE',
+        courseId
+    }
+}
+
+export function finishDeleteCourse (cemuSave, courseId, success) {
+    return {
+        type: 'FINISH_DELETE_COURSE',
+        cemuSave,
+        courseId,
+        success
     }
 }
