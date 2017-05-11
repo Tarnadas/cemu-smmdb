@@ -6,17 +6,17 @@ import { remote } from 'electron';
 
 import AppView from './components/AppView';
 import mainApp  from './reducers';
-import downloaderMiddleware from './util/DownloaderMiddleware';
-import CourseDownloader from './util/CourseDownloader';
+import saveFileMiddleware from './util/SaveFileMiddleware';
+import SaveFileEditor from './util/SaveFileEditor';
 
 (async () => {
     const save = remote.getGlobal('save');
-    const courseDownloader = new CourseDownloader(save.appSavePath);
-    const store = createStore(mainApp, applyMiddleware(downloaderMiddleware(courseDownloader)));
+    const saveFileEditor = new SaveFileEditor(save.appSavePath);
+    const store = createStore(mainApp, applyMiddleware(saveFileMiddleware(saveFileEditor)));
 
     ReactDOM.render(
         <Provider store={store}>
-            <AppView downloader={courseDownloader} />
+            <AppView editor={saveFileEditor} />
         </Provider>,
         document.getElementById('root')
     );

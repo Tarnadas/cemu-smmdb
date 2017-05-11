@@ -13,7 +13,7 @@ class AppView extends React.Component {
                 </div>
             ) : (
                 <div>
-                    <MainView downloader={this.props.downloader} />
+                    <MainView editor={this.props.editor} />
                 </div>
             )
         )

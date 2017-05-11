@@ -38,7 +38,7 @@ class SaveFolderView extends React.Component {
     }
     componentWillMount () {
         if (!!this.props.save) {
-            this.props.downloader.setCemuSave(this.props.save);
+            this.props.editor.setCemuSave(this.props.save);
         }
     }
     render () {

@@ -1,6 +1,6 @@
 import { startDownloadCourse, progressDownloadCourse, finishDownloadCourse, finishAddCourse, finishDeleteCourse } from '../actions';
 
-export default function downloaderMiddleware (courseDownloader) {
+export default function saveFileMiddleware (courseDownloader) {
     return ({ dispatch, getState }) => next => action => {
         let onStart = (courseId, dataLength) => {
             dispatch(startDownloadCourse(courseId, dataLength));

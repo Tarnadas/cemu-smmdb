@@ -210,6 +210,13 @@ class InteractiveButton extends React.Component {
                     width: '32px',
                     height: '32px',
                     margin: '4px',
+                },
+                load: {
+                    //display: 'inline-block',
+                    float: 'left',
+                    width: '32px',
+                    height: '32px',
+                    margin: '4px auto',
                 }
             },
         });
@@ -238,6 +245,11 @@ class InteractiveButton extends React.Component {
                         <svg style={styles.checked} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 426.7 426.7">
                             <path d="M213.3 0C95.5 0 0 95.5 0 213.3s95.5 213.3 213.3 213.3c117.8 0 213.3-95.5 213.3-213.3S331.2 0 213.3 0zM174.2 322.9l-93.9-93.9 31.3-31.3 62.6 62.6 140.9-140.9 31.3 31.3L174.2 322.9z" fill={this.state.hover ? '#fff' : '#323245'} />
                         </svg>
+                    )
+                }
+                {
+                    (!this.props.complete && progress === 100) && (
+                        <img style={styles.checked} src={'./assets/images/load.gif'} />
                     )
                 }
             </div>
