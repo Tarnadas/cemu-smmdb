@@ -1,7 +1,7 @@
-import React    from 'react';
-import ReactCSS from 'reactcss';
+import React    from 'react'
+import ReactCSS from 'reactcss'
 
-import InteractiveButton from './InteractiveButton';
+import InteractiveButton from './InteractiveButton'
 
 export default class LoadSaveView extends React.Component {
     render () {
@@ -13,14 +13,28 @@ export default class LoadSaveView extends React.Component {
                     left: '50%',
                     transform: 'translateY(-50%) translateX(-50%)',
                     textAlign: 'center'
+                },
+                text: {
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translateY(+150%) translateX(-50%)',
+                    width: '100%',
+                    color: '#323245',
+                    textAlign: 'center'
                 }
             },
         });
         let self = this;
         return (
             !this.props.save || this.props.save.length === 0 ? (
-                <div style={styles.center}>
-                    <InteractiveButton type="addSave" isFLoat value="Please select your Cemu SMM folder" />
+                <div>
+                    <div style={styles.center}>
+                        <InteractiveButton type="addSave" isFloat value="Please select your Cemu SMM folder" />
+                    </div>
+                    <div style={styles.text}>
+                        Your SMM save folder is located at<br/>'path\to\cemu\mlc01\emulatorSave\#saveID#'
+                    </div>
                 </div>
             ) : (
                 <div style={styles.center}>

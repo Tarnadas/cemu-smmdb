@@ -1,8 +1,8 @@
-import React    from 'react';
-import { connect } from 'react-redux';
+import React    from 'react'
+import { connect } from 'react-redux'
 
-import LoadSaveView from '../components/LoadSaveView';
-import MainView from './MainView';
+import LoadSaveView from '../components/LoadSaveView'
+import MainView from './MainView'
 
 class AppView extends React.Component {
     render () {

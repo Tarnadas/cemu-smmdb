@@ -1,10 +1,10 @@
-import Promise from 'bluebird';
-import smm from 'cemu-smm';
-import fileType from 'file-type';
-import readChunk from 'read-chunk';
-import { unzip } from 'cross-unzip';
-import mv from 'mv';
-import rimraf from 'rimraf';
+import Promise from 'bluebird'
+import { loadCourse } from 'cemu-smm'
+import fileType from 'file-type'
+import readChunk from 'read-chunk'
+import { unzip } from 'cross-unzip'
+import mv from 'mv'
+import rimraf from 'rimraf'
 
 let request = require('request');
 if (process.env.NODE_ENV === 'development') {
@@ -56,7 +56,7 @@ export default class DownloadedCourse {
         this.req.on('end', async () => {
 
             let mime = fileType(readChunk.sync(this.filePathTemp, 0, 4100)).mime;
-            if (mime !== 'application/x-rar-compressed' && mime !== 'application/zip' && mime !== 'application/x-7z-compressed') {
+            if (mime !== 'application/x-rar-compressed' && mime !== 'application/zip' && mime !== 'application/x-7z-compressed' && mime !== 'application/x-tar') {
                 throw new Error("Could not decompress file! Unknown format: " + mime)
             }
 
@@ -80,7 +80,7 @@ export default class DownloadedCourse {
             let promises = [];
             for (let i = 0; i < this.filePath.length; i++) {
                 promises.push(new Promise(async (resolve) => {
-                    let course = await smm.loadCourse(this.filePath[i]);
+                    let course = await loadCourse(this.filePath[i]);
                     if (await course.isThumbnailBroken()) {
                         let isFixed = false, iteration = 0, thumbnailPath = null;
                         let thumbnailUrl = `http://smmdb.ddns.net/img/courses/thumbnails/${courseId}.pic`;

@@ -1,10 +1,13 @@
-import React    from 'react';
-import ReactCSS from 'reactcss';
-import { connect } from 'react-redux';
-import { remote } from 'electron';
-import smm from 'cemu-smm';
+import React    from 'react'
+import ReactCSS from 'reactcss'
+import { connect } from 'react-redux'
+import { remote } from 'electron'
+import { loadSave as loadCemuSave } from 'cemu-smm'
+import { zip } from 'cross-unzip'
 
-import { addSave, removeSave, loadSave, downloadCourse, addCourse, deleteCourse } from '../actions';
+import path from 'path'
+
+import { addSave, removeSave, loadSave, downloadCourse, addCourse, deleteCourse } from '../actions'
 
 const dialog = remote.dialog;
 
@@ -39,15 +42,19 @@ class InteractiveButton extends React.Component {
         }
     }
     addSave () {
-        dialog.showOpenDialog({properties: ['openDirectory']}, async (path) => {
-            if (!!path) {
-                path = path[0];
+        dialog.showOpenDialog({properties: ['openDirectory']}, async cemuPath => {
+            if (!!cemuPath) {
+                cemuPath = cemuPath[0];
                 try {
-                    let cemuSave = await smm.loadSave(path);
-                    await cemuSave.reorder();
-                    await cemuSave.loadCourses();
-                    await cemuSave.exportJpeg();
-                    this.props.dispatch(addSave(path, cemuSave));
+                    let cemuSave = await loadCemuSave(cemuPath);
+                    zip(cemuPath, `${cemuPath}_backup_${(new Date()).toISOString().slice(0,10)}.zip`, async err => {
+                        if (err) throw err;
+                        await cemuSave.reorder();
+                        await cemuSave.loadCourses();
+                        await cemuSave.exportJpeg();
+                        await cemuSave.unlockAmiibos();
+                        this.props.dispatch(addSave(cemuPath, cemuSave));
+                    });
                 } catch (err) {
                     console.log(err); // TODO
                 }
@@ -62,7 +69,7 @@ class InteractiveButton extends React.Component {
         e.stopPropagation();
         (async () => {
             try {
-                let cemuSave = await smm.loadSave(this.props.path);
+                let cemuSave = await loadCemuSave(this.props.path);
                 await cemuSave.reorder();
                 await cemuSave.loadCourses();
                 await cemuSave.exportJpeg();
