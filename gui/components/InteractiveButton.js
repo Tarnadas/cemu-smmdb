@@ -47,6 +47,7 @@ class InteractiveButton extends React.Component {
                 cemuPath = cemuPath[0];
                 try {
                     let cemuSave = await loadCemuSave(cemuPath);
+                    this.props.onLoadSuccess();
                     zip(cemuPath, `${cemuPath}_backup_${(new Date()).toISOString().slice(0,10)}.zip`, async err => {
                         if (err) throw err;
                         await cemuSave.reorder();
@@ -70,6 +71,7 @@ class InteractiveButton extends React.Component {
         (async () => {
             try {
                 let cemuSave = await loadCemuSave(this.props.path);
+                this.props.onLoadSuccess();
                 await cemuSave.reorder();
                 await cemuSave.loadCourses();
                 await cemuSave.exportJpeg();

@@ -4,6 +4,18 @@ import ReactCSS from 'reactcss'
 import InteractiveButton from './InteractiveButton'
 
 export default class LoadSaveView extends React.Component {
+    constructor (props) {
+        super(props);
+        this.state = {
+            loading: false
+        };
+        this.onLoadSuccess = this.onLoadSuccess.bind(this);
+    }
+    onLoadSuccess () {
+        this.setState({
+            loading: true
+        });
+    }
     render () {
         const styles = ReactCSS({
             'default': {
@@ -27,33 +39,44 @@ export default class LoadSaveView extends React.Component {
         });
         let self = this;
         return (
-            !this.props.save || this.props.save.length === 0 ? (
-                <div>
-                    <div style={styles.center}>
-                        <InteractiveButton type="addSave" isFloat value="Please select your Cemu SMM folder" />
-                    </div>
-                    <div style={styles.text}>
-                        Your SMM save folder is located at<br/>'path\to\cemu\mlc01\emulatorSave\#saveID#'
-                    </div>
-                </div>
-            ) : (
-                <div style={styles.center}>
-                    {
-                        Array.from((function*() {
-                            for (let i = 0; i < self.props.save.length; i++) {
-                                yield (
-                                    <InteractiveButton type="loadSave" cancelable isFloat value={(() => {
-                                        let savePath = self.props.save[i];
-                                        let split = savePath.split("\\");
-                                        return `Load ${split[split.length - 4]} ${split[split.length - 1]}`;
-                                    })()} path={self.props.save[i]} key={i} />
-                                )
+            <div>
+                {
+                    !this.props.save || this.props.save.length === 0 ? (
+                        <div>
+                            <div style={styles.center}>
+                                <InteractiveButton type="addSave" isFloat value="Please select your Cemu SMM folder"
+                                                   onLoadSuccess={this.onLoadSuccess}/>
+                            </div>
+                            <div style={styles.text}>
+                                Your SMM save folder is located at<br/>'path\to\cemu\mlc01\emulatorSave\#saveID#'
+                            </div>
+                        </div>
+                    ) : (
+                        <div style={styles.center}>
+                            {
+                                Array.from((function*() {
+                                    for (let i = 0; i < self.props.save.length; i++) {
+                                        yield (
+                                            <InteractiveButton type="loadSave" cancelable isFloat
+                                                               onLoadSuccess={this.onLoadSuccess} value={(() => {
+                                                let savePath = self.props.save[i];
+                                                let split = savePath.split("\\");
+                                                return `Load ${split[split.length - 4]} ${split[split.length - 1]}`;
+                                            })()} path={self.props.save[i]} key={i}/>
+                                        )
+                                    }
+                                })())
                             }
-                        })())
-                    }
-                    <InteractiveButton type="addSave" isFloat value="Load another Cemu SMM folder" />
-                </div>
-            )
+                            <InteractiveButton type="addSave" isFloat value="Load another Cemu SMM folder"/>
+                        </div>
+                    )
+                }
+                {
+                    (this.state.loading) && (
+                        <img style={styles.center} src={'./assets/images/load.gif'} />
+                    )
+                }
+            </div>
         );
     }
 }
