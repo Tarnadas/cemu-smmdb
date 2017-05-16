@@ -41,7 +41,7 @@ export default class SmmdbFile extends React.Component {
                     margin: '20px 0 0 20px',
                     width: '180px',
                     height: '160px',
-                    background: `linear-gradient(90deg, #99ff66 ${progress}%, #a0a0af ${progress}%)`,
+                    background: !!this.props.isAdded ? ('#33cc33') : (`linear-gradient(90deg, #99ff66 ${progress}%, #a0a0af ${progress}%)`),
                     color: '#fff',
                     overflow: 'hidden',
                     cursor: 'pointer'
