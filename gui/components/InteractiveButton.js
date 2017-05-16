@@ -30,6 +30,12 @@ class InteractiveButton extends React.Component {
             case 'deleteCourse':
                 this.handleClick = this.deleteCourse.bind(this);
                 break;
+            case 'showApiKey':
+                this.handleClick = this.showApiKey.bind(this);
+                break;
+            case 'addApiKey':
+                this.handleClick = this.props.onClick;
+                break;
             default:
         }
         this.state = {
@@ -90,6 +96,9 @@ class InteractiveButton extends React.Component {
     deleteCourse () {
         this.props.dispatch(deleteCourse(this.props.courseId));
     }
+    showApiKey () {
+        this.props.onApiKeyClick();
+    }
     mouseEnter() {
         this.setState({
             hover: true
@@ -111,7 +120,7 @@ class InteractiveButton extends React.Component {
                     margin: '0 auto 10px auto',
                     padding: '0 10px',
                     height: '40px',
-                    width: '100%',
+                    width: !!this.props.width ? this.props.width : '100%',
                     lineHeight: '40px',
                     background: isAdded ? ('#33cc33') : (`linear-gradient(90deg, #99ff66 ${progress}%, #ffe500 ${progress}%)`),
                     color: '#323245',
@@ -128,7 +137,7 @@ class InteractiveButton extends React.Component {
                     margin: '0 auto 10px auto',
                     padding: '0 10px',
                     height: '40px',
-                    width: '100%',
+                    width: !!this.props.width ? this.props.width : '100%',
                     lineHeight: '40px',
                     background: isAdded ? ('#33cc33') : (`linear-gradient(90deg, #99ff66 ${progress}%, #323245 ${progress}%)`),
                     color: '#fff',
@@ -165,6 +174,7 @@ class InteractiveButton extends React.Component {
                     clear: 'both',
                     margin: '10px auto',
                     padding: '0 10px',
+                    width: !!this.props.width ? this.props.width : '',
                     height: '40px',
                     lineHeight: '40px',
                     backgroundColor: '#ffe500',
@@ -183,6 +193,7 @@ class InteractiveButton extends React.Component {
                     clear: 'both',
                     margin: '10px auto',
                     padding: '0 10px',
+                    width: !!this.props.width ? this.props.width : '',
                     height: '40px',
                     lineHeight: '40px',
                     backgroundColor: '#323245',

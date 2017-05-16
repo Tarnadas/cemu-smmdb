@@ -9,7 +9,7 @@ class AppView extends React.Component {
         return (
             !this.props.cemuSave ? (
                 <div>
-                    <LoadSaveView save={this.props.cemuSavePath} />
+                    <LoadSaveView save={this.props.cemuSavePath} apiKey={this.props.apiKey} />
                 </div>
             ) : (
                 <div>
@@ -21,8 +21,10 @@ class AppView extends React.Component {
 }
 export default connect((state) => {
     let cemuSavePath = state.get('appSaveData').get('cemuSavePath');
+    let apiKey = state.get('appSaveData').get('apiKey');
     return {
         cemuSavePath: !cemuSavePath ? [] : cemuSavePath.toArray(),
-        cemuSave: state.get('cemuSave')
+        cemuSave: state.get('cemuSave'),
+        apiKey: apiKey
     };
 })(AppView);

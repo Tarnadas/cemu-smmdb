@@ -38,6 +38,11 @@ export default function mainApp (state, action) {
         case 'LOAD_SAVE':
             state = state.set('cemuSave', action.cemuSave);
             return state;
+        case 'ADD_API_KEY':
+            appSaveData = state.get('appSaveData').set('apiKey', action.apiKey);
+            fs.writeFileSync(path.join(state.get('appSavePath'), 'save.json'), JSON.stringify(appSaveData));
+            state = state.set('appSaveData', appSaveData);
+            return state;
         case 'SMMDB_RESULT':
             state = state.set('smmdb', action.smmdb);
             return state;

@@ -61,11 +61,11 @@ export default class SmmdbFile extends React.Component {
                     margin: 'auto'
                 },
                 divTitle: {
-                    margin: '10px 0 0 10px',
+                    margin: '5px 0 0 5px',
                     backgroundColor: '#e5e5ef',
                     width: '140px',
-                    height: '30px',
-                    lineHeight: '30px',
+                    height: '40px',
+                    lineHeight: '20px',
                     overflow: 'hidden',
                     color: '#000',
                     padding: '0 10px'
@@ -73,17 +73,40 @@ export default class SmmdbFile extends React.Component {
                 divScroll: {
                     animation: 'scroll 4s linear infinite',
                     width: '400px',
-                    height: '30px',
-                    lineHeight: '30px',
+                    height: '20px',
+                    lineHeight: '20px',
                     display: 'block',
-                    position: 'relative'
+                    position: 'relative',
+                    whiteSpace: 'nowrap'
                 },
                 divScrollPaused: {
                     width: '400px',
-                    height: '30px',
-                    lineHeight: '30px',
+                    height: '20px',
+                    lineHeight: '20px',
                     display: 'block',
-                    position: 'relative'
+                    position: 'relative',
+                    whiteSpace: 'nowrap'
+                },
+                divDetails: {
+                    width: '140px',
+                    height: '20px'
+                },
+                value: {
+                    verticalAlign: 'top',
+                    display: 'inline-block',
+                    height: '20px',
+                    lineHeight: '25px',
+                    marginLeft: '4px',
+                    marginRight: '8px'
+                },
+                imgDiv: {
+                    display: 'inline-block',
+                    height: '20px'
+                },
+                imgDetails: {
+                    display: 'inline-block',
+                    height: '20px',
+                    width: 'auto'
                 }
             }
         });
@@ -101,6 +124,26 @@ export default class SmmdbFile extends React.Component {
                 <div style={styles.divTitle}>
                     <div style={this.state.hover ? styles.divScroll : styles.divScrollPaused}>
                         {this.props.course.title}
+                    </div>
+                    <div style={styles.divDetails}>
+                        <div style={styles.imgDiv}>
+                            <img style={styles.imgDetails} src='./assets/images/starred.png' />
+                        </div>
+                        <div style={styles.value}>
+                            {this.props.course.stars}
+                        </div>
+                        <div style={styles.imgDiv}>
+                            <img style={styles.imgDetails} src='./assets/images/downloads.png' />
+                        </div>
+                        <div style={styles.value}>
+                            {this.props.course.downloads}
+                        </div>
+                        <div style={styles.imgDiv}>
+                            <img style={styles.imgDetails} src='./assets/images/completed.png' />
+                        </div>
+                        <div style={styles.value}>
+                            {this.props.course.completed}
+                        </div>
                     </div>
                 </div>
             </li>

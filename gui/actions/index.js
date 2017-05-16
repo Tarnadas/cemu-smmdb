@@ -27,6 +27,13 @@ export function smmdbResult (smmdb) {
     }
 }
 
+export function addApiKey (apiKey) {
+    return {
+        type: 'ADD_API_KEY',
+        apiKey
+    }
+}
+
 export function downloadCourse (courseId, courseName, ownerName, videoId) {
     return {
         type: 'DOWNLOAD_COURSE',
