@@ -81,20 +81,24 @@ class InteractiveButton extends React.Component {
                 await cemuSave.reorder();
                 await cemuSave.loadCourses();
                 await cemuSave.exportJpeg();
-                this.props.dispatch(loadSave(cemuSave));
+                this.props.dispatch(loadSave(cemuSave, this.props.saveId));
             } catch (err) {
                 console.log(err); // TODO
             }
         })();
     }
     downloadCourse () {
-        this.props.dispatch(downloadCourse(this.props.courseId, this.props.courseName, this.props.ownerName, this.props.videoId));
+        if (!this.props.progress && !this.props.complete) {
+            this.props.dispatch(downloadCourse(this.props.courseId, this.props.courseName, this.props.ownerName, this.props.videoId));
+        }
     }
     addCourse () {
-        this.props.dispatch(addCourse(this.props.courseId));
+        if (!this.props.isAdded) {
+            this.props.dispatch(addCourse(this.props.courseId));
+        }
     }
     deleteCourse () {
-        this.props.dispatch(deleteCourse(this.props.courseId));
+        this.props.dispatch(deleteCourse(this.props.smmdbId, this.props.saveId));
     }
     showApiKey () {
         this.props.onApiKeyClick();
@@ -110,7 +114,7 @@ class InteractiveButton extends React.Component {
         });
     }
     render () {
-        const progress = !!this.props.progress ? this.props.progress*100 : 0;
+        const progress = !!this.props.complete ? 100 : (!!this.props.progress ? this.props.progress*100 : 0);
         const isDisabled = !!this.props.isDownloaded ? false : this.props.isDownloaded === false;
         const isAdded = !!this.props.isAdded;
         const styles = ReactCSS({

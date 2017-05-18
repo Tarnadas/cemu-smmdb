@@ -22,7 +22,7 @@ export default class SaveFile extends React.Component {
         });
     }
     onClick () {
-        this.props.onClick(this.props.course)
+        this.props.onClick(this.props.course, this.props.smmdbId, this.props.saveId);
     }
     render () {
         const styles = ReactCSS({

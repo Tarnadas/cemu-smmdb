@@ -13,10 +13,11 @@ export function removeSave (cemuSavePath) {
     }
 }
 
-export function loadSave (cemuSave) {
+export function loadSave (cemuSave, saveId) {
     return {
         type: 'LOAD_SAVE',
-        cemuSave
+        cemuSave,
+        saveId
     }
 }
 
@@ -60,10 +61,10 @@ export function progressDownloadCourse (courseId, dataLength) {
     }
 }
 
-export function finishDownloadCourse (courseId) {
+export function finishDownloadCourse (course) {
     return {
         type: 'FINISH_DOWNLOAD_COURSE',
-        courseId
+        course
     }
 }
 
@@ -74,27 +75,30 @@ export function addCourse (courseId) {
     }
 }
 
-export function finishAddCourse (cemuSave, courseId, success) {
+export function finishAddCourse (cemuSave, smmdbId, saveId, success) {
     return {
         type: 'FINISH_ADD_COURSE',
         cemuSave,
-        courseId,
+        smmdbId,
+        saveId,
         success
     }
 }
 
-export function deleteCourse (courseId) {
+export function deleteCourse (smmdbId, saveId) {
     return {
         type: 'DELETE_COURSE',
-        courseId
+        smmdbId,
+        saveId
     }
 }
 
-export function finishDeleteCourse (cemuSave, courseId, success) {
+export function finishDeleteCourse (cemuSave, smmdbId, saveId, success) {
     return {
         type: 'FINISH_DELETE_COURSE',
         cemuSave,
-        courseId,
+        smmdbId,
+        saveId,
         success
     }
 }

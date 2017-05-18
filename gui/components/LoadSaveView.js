@@ -172,7 +172,7 @@ class LoadSaveView extends React.Component {
                                 Array.from((function*() {
                                     for (let i = 0; i < self.props.save.length; i++) {
                                         yield (
-                                            <InteractiveButton type="loadSave" cancelable isFloat onLoadSuccess={self.onLoadSuccess} value={(() => {
+                                            <InteractiveButton type="loadSave" cancelable isFloat saveId={i} onLoadSuccess={self.onLoadSuccess} value={(() => {
                                                 let savePath = self.props.save[i];
                                                 let split = savePath.split("\\");
                                                 return `Load ${split[split.length - 4]} ${split[split.length - 1]}`;
@@ -181,7 +181,7 @@ class LoadSaveView extends React.Component {
                                     }
                                 })())
                             }
-                            <InteractiveButton type="addSave" isFloat value="Load another Cemu SMM folder"/>
+                            <InteractiveButton type="addSave" isFloat value="Load another Cemu SMM folder" onLoadSuccess={this.onLoadSuccess} />
                         </div>
                     )
                 }

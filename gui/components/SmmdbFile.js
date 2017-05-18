@@ -33,7 +33,7 @@ export default class SmmdbFile extends React.Component {
         this.props.onClick(this.props.course)
     }
     render() {
-        const progress = !!this.props.progress ? this.props.progress*100 : 0;
+        const progress = this.props.isDownloaded ? 100 : (!!this.props.progress ? this.props.progress*100 : 0);
         const styles = ReactCSS({
             'default': {
                 li: {

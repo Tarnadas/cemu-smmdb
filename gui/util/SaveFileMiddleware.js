@@ -1,6 +1,6 @@
 import { startDownloadCourse, progressDownloadCourse, finishDownloadCourse, finishAddCourse, finishDeleteCourse } from '../actions';
 
-export default function saveFileMiddleware (courseDownloader) {
+export default function saveFileMiddleware (saveFileEditor) {
     return ({ dispatch, getState }) => next => action => {
         let onStart = (courseId, dataLength) => {
             dispatch(startDownloadCourse(courseId, dataLength));
@@ -11,21 +11,21 @@ export default function saveFileMiddleware (courseDownloader) {
         let onFinish = (courseId) => {
             dispatch(finishDownloadCourse(courseId));
         };
-        let onAddFinish = (cemuSave, courseId, success) => {
-            dispatch(finishAddCourse(cemuSave, courseId, success));
+        let onAddFinish = (cemuSave, smmdbId, saveId, success) => {
+            dispatch(finishAddCourse(cemuSave, smmdbId, saveId, success));
         };
-        let onDeleteFinish = (cemuSave, courseId, success) => {
-            dispatch(finishDeleteCourse(cemuSave, courseId, success));
+        let onDeleteFinish = (cemuSave, smmdbId, saveId, success) => {
+            dispatch(finishDeleteCourse(cemuSave, smmdbId, saveId, success));
         };
         switch (action.type) {
             case 'DOWNLOAD_COURSE':
-                courseDownloader.download(onStart, onProgress, onFinish, action.courseId, action.courseName, action.ownerName, action.videoId);
+                saveFileEditor.download(onStart, onProgress, onFinish, action.courseId, action.courseName, action.ownerName, action.videoId);
                 break;
             case 'ADD_COURSE':
-                courseDownloader.add(onAddFinish, action.courseId);
+                saveFileEditor.add(onAddFinish, action.courseId);
                 break;
             case 'DELETE_COURSE':
-                courseDownloader.delete(onDeleteFinish, action.courseId);
+                saveFileEditor.delete(onDeleteFinish, action.smmdbId, action.saveId);
                 break;
         }
         return next(action);

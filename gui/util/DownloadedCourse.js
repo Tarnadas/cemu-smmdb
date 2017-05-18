@@ -19,43 +19,47 @@ if (process.env.NODE_ENV === 'development') {
 import fs from 'fs';
 import path from 'path';
 
+let appSavePath;
+
 export default class DownloadedCourse {
 
-    constructor (appSavePath) {
-        this.appSavePath = appSavePath;
+    constructor (path) {
+        appSavePath = path;
     }
 
     download (onStart, onProgress, onFinish, courseId, courseName, ownerName, videoId) {
 
-        if (!fs.existsSync(path.join(this.appSavePath, 'temp'))){
-            fs.mkdirSync(path.join(this.appSavePath, 'temp'));
+        this.smmdbId = courseId;
+
+        if (!fs.existsSync(path.join(appSavePath, 'temp'))){
+            fs.mkdirSync(path.join(appSavePath, 'temp'));
         }
-        if (!fs.existsSync(path.join(this.appSavePath, 'downloads'))){
-            fs.mkdirSync(path.join(this.appSavePath, 'downloads'));
+        if (!fs.existsSync(path.join(appSavePath, 'downloads'))){
+            fs.mkdirSync(path.join(appSavePath, 'downloads'));
         }
 
         let courseUrl = `http://smmdb.ddns.net/courses/${courseId}`;
-        this.filePathTemp = path.join(this.appSavePath, `temp/${courseId}`);
-        this.filePath = path.join(this.appSavePath, `downloads/${courseId}`);
-        this.stream = fs.createWriteStream(this.filePathTemp);
+        let filePathTemp = path.join(appSavePath, `temp/${courseId}`);
+        this.filePath = path.join(appSavePath, `downloads/${courseId}`);
+        let stream = fs.createWriteStream(filePathTemp);
 
-        this.req = request({
+        const req = request({
             method: 'GET',
             uri: courseUrl
         });
-        this.req.pipe(this.stream);
+        req.pipe(stream);
 
-        this.req.on('response', (data) => {
+        req.on('response', (data) => {
             onStart(courseId, parseInt(data.headers['content-length']));
         });
 
-        this.req.on('data', (chunk) => {
+        req.on('data', (chunk) => {
             onProgress(courseId, chunk.length);
         });
 
-        this.req.on('end', async () => {
+        req.on('end', async () => {
 
-            let mime = fileType(readChunk.sync(this.filePathTemp, 0, 4100)).mime;
+            let mime = fileType(readChunk.sync(filePathTemp, 0, 4100)).mime;
             if (mime !== 'application/x-rar-compressed' && mime !== 'application/zip' && mime !== 'application/x-7z-compressed' && mime !== 'application/x-tar') {
                 throw new Error("Could not decompress file! Unknown format: " + mime)
             }
@@ -68,9 +72,9 @@ export default class DownloadedCourse {
                 })
             });
             await new Promise((resolve) => {
-                unzip(this.filePathTemp, this.filePath, (err) => {
+                unzip(filePathTemp, this.filePath, (err) => {
                     if (err) throw err;
-                    fs.unlink(this.filePathTemp, () => {});
+                    fs.unlink(filePathTemp, () => {});
                     resolve();
                 });
             });
@@ -91,7 +95,7 @@ export default class DownloadedCourse {
                                         method: 'GET',
                                         uri: thumbnailUrl
                                     });
-                                    thumbnailPath = path.join(this.appSavePath, `temp/${courseId}_${i}.pic`);
+                                    thumbnailPath = path.join(appSavePath, `temp/${courseId}_${i}.pic`);
                                     let thumbnailStream = fs.createWriteStream(thumbnailPath);
                                     thumbnailReq.pipe(thumbnailStream);
                                     thumbnailReq.on('response', (data) => {
@@ -125,15 +129,20 @@ export default class DownloadedCourse {
                             await course.setThumbnail(thumbnailPath);
                         }
                     }
-                    course.setMaker(ownerName, false);
-                    course.setTitle(courseName, false);
+                    await course.setMaker(ownerName, false);
+                    await course.setTitle(courseName, false);
                     await course.writeCrc();
                     resolve();
                 }));
             }
             await Promise.all(promises);
 
-            onFinish(courseId);
+            for (let i = 0; i < this.filePath.length; i++) {
+                let filePath = path.join(this.filePath[i], 'data.json');
+                fs.writeFileSync(filePath, JSON.stringify({ smmdbId: courseId, packageId: i }));
+            }
+
+            onFinish(this);
         });
 
         return this;

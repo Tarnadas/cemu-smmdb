@@ -2,10 +2,10 @@ import DownloadedCourse from './DownloadedCourse';
 
 export default class SaveFileEditor {
 
-    constructor (appSavePath) {
+    constructor (appSavePath, downloadedCourses) {
 
         this.appSavePath = appSavePath;
-        this.downloadedCourses = {};
+        this.downloadedCourses = !!downloadedCourses ? downloadedCourses : {};
 
     }
 
@@ -15,43 +15,44 @@ export default class SaveFileEditor {
 
     }
 
-    async download (onStart, onProgress, onFinish, courseId, courseName, ownerName, videoId) {
+    async download (onStart, onProgress, onFinish, smmdbId, courseName, ownerName, videoId) {
 
         try {
-            this.downloadedCourses[courseId] = await (new DownloadedCourse(this.appSavePath)).download(onStart, onProgress, onFinish, courseId, courseName, ownerName, videoId);
+            this.downloadedCourses[smmdbId] = await (new DownloadedCourse(this.appSavePath)).download(onStart, onProgress, onFinish, smmdbId, courseName, ownerName, videoId);
         } catch (err) {
             throw err;
         }
 
     }
 
-    async add (onFinish, courseId) {
+    async add (onFinish, smmdbId) {
 
-        let success = false;
+        let success = false, saveId = -1;
         try {
-            let filePath = this.downloadedCourses[courseId].filePath;
+            let filePath = this.downloadedCourses[smmdbId].filePath;
             for (let i = 0; i < filePath.length; i++) {
-                let newId = await this.cemuSave.addCourse(filePath[i]);
-                await this.cemuSave.courses[`course${newId.pad(3)}`].exportJpeg();
+                saveId = await this.cemuSave.addCourse(filePath[i]);
+                await this.cemuSave.courses[`course${saveId.pad(3)}`].exportJpeg();
+                this.downloadedCourses[smmdbId].addedToSave = true;
             }
             success = true;
         } catch (err) {
             console.log(err);
         }
-        onFinish(this.cemuSave, courseId, success);
+        onFinish(this.cemuSave, smmdbId, saveId, success);
 
     }
 
-    async delete (onFinish, courseId) {
+    async delete (onFinish, smmdbId, saveId) {
 
         let success = false;
         try {
-            await this.cemuSave.deleteCourse(courseId);
+            await this.cemuSave.deleteCourse(saveId);
             success = true;
         } catch (err) {
             console.log(err);
         }
-        onFinish(this.cemuSave, courseId, success);
+        onFinish(this.cemuSave, smmdbId, saveId, success);
 
     }
 

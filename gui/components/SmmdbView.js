@@ -53,20 +53,20 @@ class SmmdbView extends React.Component {
             for (let i = 0; i < this.props.order.length; i++) {
                 let course = this.props.courses[this.props.order[i]];
                 let progress;
-                if (!!currentDownloads[+course.id]) {
-                    progress = currentDownloads[+course.id][0] / currentDownloads[+course.id][1];
-                    progresses[+course.id] = progress;
+                if (!!currentDownloads[course.id]) {
+                    progress = currentDownloads[course.id][0] / currentDownloads[course.id][1];
+                    progresses[course.id] = progress;
                 }
             }
         }
         return (
             <div style={styles.div}>
                 <SmmdbFileDetails course={this.state.course} onClick={this.hideSaveDetails} progress={
-                    !!this.state.course && !!progresses[+this.state.course.id] ? progresses[+this.state.course.id] : null
+                    !!this.state.course && !!progresses[this.state.course.id] ? progresses[this.state.course.id] : null
                 } isDownloaded={
-                    !!this.state.course && !!this.props.downloads && this.props.downloads.includes(this.state.course.id)
+                    !!this.state.course && !!this.props.downloads && !!this.props.downloads[this.state.course.id]
                 } isAdded={
-                    !!this.state.course && !!this.props.addedToSave && this.props.addedToSave.includes(this.state.course.id)
+                    !!this.state.course && !!this.props.currentSave && !!this.props.currentSave[this.state.course.id] && !!this.props.currentSave[this.state.course.id].addedToSave
                 } />
                 <ul style={styles.ul}>
                     {
@@ -74,11 +74,11 @@ class SmmdbView extends React.Component {
                             for (let i = 0; i < self.props.order.length; i++) {
                                 let course = self.props.courses[self.props.order[i]];
                                 yield <SmmdbFile onClick={self.showSaveDetails} course={course} progress={
-                                    !!progresses[+course.id] && progresses[+course.id]
+                                    !!progresses[course.id] && progresses[course.id]
                                 } isDownloaded={
-                                    !!self.props.downloads && self.props.downloads.includes(course.id)
+                                    !!self.props.downloads && !!self.props.downloads[course.id]
                                 } isAdded={
-                                    !!self.props.addedToSave && self.props.addedToSave.includes(course.id)
+                                    !!self.props.currentSave && !!self.props.currentSave[course.id] && !!self.props.currentSave[course.id].addedToSave
                                 } key={course.id} />
                             }
                         })())
@@ -90,13 +90,13 @@ class SmmdbView extends React.Component {
 }
 export default connect((state) => {
     let currentDownloads = state.get('currentDownloads');
-    let downloads = state.get('downloads');
-    let addedToSave = state.get('addedToSave');
+    let downloads = state.getIn(['appSaveData', 'downloads']);
+    let currentSave = state.getIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'smmdb']);
     return {
         courses: state.get('smmdb').courses,
         order: state.get('smmdb').order,
         currentDownloads: !!currentDownloads ? currentDownloads.toJS() : null,
         downloads: !!downloads ? downloads.toJS() : null,
-        addedToSave: !!addedToSave ? addedToSave.toJS() : null
+        currentSave: !!currentSave ? currentSave.toJS() : null
     }
 })(SmmdbView);

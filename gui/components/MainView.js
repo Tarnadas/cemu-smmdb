@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import request from 'request-promise';
 
 import ChangeViewButton from './ChangeViewButton';
-import SaveFolderView from './SaveFolderView';
+import SaveView from './SaveView';
 import SmmdbView from './SmmdbView';
 import MainMenu from './MainMenu';
 import { smmdbResult } from '../actions';
@@ -42,7 +42,7 @@ class MainView extends React.Component {
                 return (
                     <div>
                         <ChangeViewButton onClick={this.handleClick} view={this.state.currentView} />
-                        <SaveFolderView editor={this.props.editor} />
+                        <SaveView editor={this.props.editor} />
                         <MainMenu />
                     </div>
                 );

@@ -11,7 +11,7 @@ import SaveFileEditor from './util/SaveFileEditor';
 
 (async () => {
     const save = remote.getGlobal('save');
-    const saveFileEditor = new SaveFileEditor(save.appSavePath);
+    const saveFileEditor = new SaveFileEditor(save.appSavePath, !!save.appSaveData && save.appSaveData.downloads);
     const store = createStore(mainApp, applyMiddleware(saveFileMiddleware(saveFileEditor)));
 
     ReactDOM.render(
