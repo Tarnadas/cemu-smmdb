@@ -144,7 +144,7 @@ export default class SmmdbFileDetails extends React.Component {
                             )
                         }
                         <div style={styles.navigation}>
-                            <InteractiveButton type="downloadCourse" value="Download" progress={this.props.progress} complete={this.props.isDownloaded} courseId={this.props.course.id} courseName={this.props.course.title} ownerName={this.props.course.ownername} videoId={this.props.course.videoid} courseType={this.props.course.coursetype} />
+                            <InteractiveButton type="downloadCourse" value="Download" progress={this.props.progress} complete={this.props.isDownloaded} modified={this.props.course.lastmodified} isModified={!!this.props.modified && this.props.course.lastmodified > this.props.modified} courseId={this.props.course.id} courseName={this.props.course.title} ownerName={this.props.course.ownername} videoId={this.props.course.videoid} courseType={this.props.course.coursetype} />
                             {
                                 this.props.isPackage ? (
                                     <InteractiveButton type="addCourse" value="Show Package" isPackage={true} courseId={this.props.course.id} onOpenPackage={this.props.onOpenPackage} />

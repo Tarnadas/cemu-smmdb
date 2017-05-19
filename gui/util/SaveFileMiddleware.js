@@ -28,7 +28,7 @@ export default function saveFileMiddleware (saveFileEditor) {
         };
         switch (action.type) {
             case 'DOWNLOAD_COURSE':
-                saveFileEditor.downloadCourse(onStart, onProgress, onFinish, action.courseId, action.courseName, action.ownerName, action.videoId, action.courseType);
+                saveFileEditor.downloadCourse(onStart, onProgress, onFinish, action.courseId, action.courseName, action.ownerName, action.videoId, action.courseType, action.modified);
                 break;
             case 'ADD_COURSE':
                 if (!!action.packageId) {

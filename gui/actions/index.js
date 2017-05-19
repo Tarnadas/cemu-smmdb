@@ -55,14 +55,15 @@ export function closePackage () {
     }
 }
 
-export function downloadCourse (courseId, courseName, ownerName, videoId, courseType) {
+export function downloadCourse (courseId, courseName, ownerName, videoId, courseType, modified) {
     return {
         type: 'DOWNLOAD_COURSE',
         courseId,
         courseName,
         ownerName,
         videoId,
-        courseType
+        courseType,
+        modified
     }
 }
 

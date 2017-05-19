@@ -200,7 +200,7 @@ class LoadSaveView extends React.Component {
                                 Go to <a href="http://smmdb.ddns.net" target="_blank">SMMDB</a> > Login > Profile > Show API Key
                             </div>
                             <div style={styles.apiKeyExplanationSmall}>
-                                (With an API Key, you will be able to upload courses, star courses, flag courses as completed)
+                                (With an API Key, you will be able to upload courses, star courses, flag courses as completed // in the near future)
                             </div>
                             <input style={styles.apiKeyInput} type="text" value={!this.state.apiKey ? "" : this.state.apiKey} onChange={this.handleChange} />
                             <InteractiveButton type="addApiKey" width="400px" apiKey={this.state.apiKey} value="Save" onClick={this.addApiKey} />

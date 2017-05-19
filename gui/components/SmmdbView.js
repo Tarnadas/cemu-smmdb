@@ -197,6 +197,8 @@ class SmmdbView extends React.Component {
                                 !!this.state.course && !!this.props.currentSave && !!this.props.currentSave[this.state.course.id] && !!this.props.currentSave[this.state.course.id].addedToSave
                             } isPackage={
                                 !!this.state.course && !!this.props.downloads && !!this.props.downloads[this.state.course.id] && this.props.downloads[this.state.course.id].isPackage
+                            } modified={
+                                !!this.state.course && !!this.props.downloads && !!this.props.downloads[this.state.course.id] && this.props.downloads[this.state.course.id].modified
                             } />
                             <ul style={styles.ul}>
                                 {
@@ -209,6 +211,8 @@ class SmmdbView extends React.Component {
                                                 !!self.props.downloads && !!self.props.downloads[course.id]
                                             } isAdded={
                                                 !!self.props.currentSave && !!self.props.currentSave[course.id] && !!self.props.currentSave[course.id].addedToSave
+                                            } modified={
+                                                !!self.props.downloads && !!self.props.downloads[course.id] && self.props.downloads[course.id].modified
                                             } key={course.id} />
                                         }
                                     })())

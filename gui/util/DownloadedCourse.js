@@ -27,7 +27,7 @@ export default class DownloadedCourse {
         appSavePath = path;
     }
 
-    download (onStart, onProgress, onFinish, courseId, courseName, ownerName, videoId, courseType) {
+    download (onStart, onProgress, onFinish, courseId, courseName, ownerName, videoId, courseType, modified) {
 
         this.smmdbId = courseId;
 
@@ -81,6 +81,7 @@ export default class DownloadedCourse {
             });
             this.filePath = await this.moveFiles(coursePathTemp);
             this.isPackage = this.filePath.length > 1;
+            this.modified = modified;
 
             // fix thumbnails + maker + title
             if (courseType !== 2) { // !== Wii U Dump

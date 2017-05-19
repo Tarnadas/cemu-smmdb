@@ -17,10 +17,10 @@ export default class SaveFileEditor {
 
     }
 
-    async downloadCourse (onStart, onProgress, onFinish, smmdbId, courseName, ownerName, videoId, courseType) {
+    async downloadCourse (onStart, onProgress, onFinish, smmdbId, courseName, ownerName, videoId, courseType, modified) {
 
         try {
-            this.downloadedCourses[smmdbId] = await (new DownloadedCourse(this.appSavePath)).download(onStart, onProgress, onFinish, smmdbId, courseName, ownerName, videoId, courseType);
+            this.downloadedCourses[smmdbId] = await (new DownloadedCourse(this.appSavePath)).download(onStart, onProgress, onFinish, smmdbId, courseName, ownerName, videoId, courseType, modified);
         } catch (err) {
             throw err;
         }

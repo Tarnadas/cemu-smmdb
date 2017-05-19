@@ -33,6 +33,7 @@ export default class SmmdbFile extends React.Component {
         this.props.onClick(this.props.course)
     }
     render() {
+        const isModified = !!this.props.modified && this.props.course.lastmodified > this.props.modified;
         const progress = this.props.isDownloaded ? 100 : (!!this.props.progress ? this.props.progress*100 : 0);
         const styles = ReactCSS({
             'default': {
@@ -41,7 +42,7 @@ export default class SmmdbFile extends React.Component {
                     margin: '20px 0 0 20px',
                     width: '180px',
                     height: '160px',
-                    background: !!this.props.isAdded ? ('#33cc33') : (`linear-gradient(90deg, #99ff66 ${progress}%, #a0a0af ${progress}%)`),
+                    background: isModified ? ('#CC7034') : (!!this.props.isAdded ? ('#33cc33') : (`linear-gradient(90deg, #99ff66 ${progress}%, #a0a0af ${progress}%)`)),
                     color: '#fff',
                     overflow: 'hidden',
                     cursor: 'pointer'

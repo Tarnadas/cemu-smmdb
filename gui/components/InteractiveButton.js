@@ -88,8 +88,8 @@ class InteractiveButton extends React.Component {
         })();
     }
     downloadCourse () {
-        if (!this.props.progress && !this.props.complete) {
-            this.props.dispatch(downloadCourse(this.props.courseId, this.props.courseName, this.props.ownerName, this.props.videoId, this.props.courseType));
+        if (this.props.isModified || !this.props.progress && !this.props.complete) {
+            this.props.dispatch(downloadCourse(this.props.courseId, this.props.courseName, this.props.ownerName, this.props.videoId, this.props.courseType, this.props.modified));
         }
     }
     addCourse () {
@@ -119,7 +119,9 @@ class InteractiveButton extends React.Component {
         });
     }
     render () {
-        const progress = !!this.props.complete ? 100 : (!!this.props.progress ? this.props.progress*100 : 0);
+        const isModified = !!this.props.isModified;
+        //const progress = !!this.props.complete ? 100 : (!!this.props.progress ? this.props.progress*100 : 0);
+        const progress = !!this.props.progress ? this.props.progress*100 : 0;
         const isDisabled = !!this.props.isDownloaded ? false : this.props.isDownloaded === false;
         const isAdded = !!this.props.isAdded;
         const styles = ReactCSS({
@@ -131,7 +133,7 @@ class InteractiveButton extends React.Component {
                     height: '40px',
                     width: !!this.props.width ? this.props.width : '100%',
                     lineHeight: '40px',
-                    background: isAdded ? ('#33cc33') : (`linear-gradient(90deg, #99ff66 ${progress}%, #ffe500 ${progress}%)`),
+                    background: isModified ? (`linear-gradient(90deg, #99ff66 ${progress}%, #CC7034 ${progress}%)`) : (isAdded ? ('#33cc33') : (!!this.props.complete ? ('#99ff66') : (`linear-gradient(90deg, #99ff66 ${progress}%, #ffe500 ${progress}%)`))),
                     color: '#323245',
                     outline: 'none',
                     overflow: 'hidden',
@@ -148,7 +150,7 @@ class InteractiveButton extends React.Component {
                     height: '40px',
                     width: !!this.props.width ? this.props.width : '100%',
                     lineHeight: '40px',
-                    background: isAdded ? ('#33cc33') : (`linear-gradient(90deg, #99ff66 ${progress}%, #323245 ${progress}%)`),
+                    background: isModified ? (`linear-gradient(90deg, #99ff66 ${progress}%, #323245 ${progress}%)`) : (isAdded ? ('#33cc33') : (!!this.props.complete ? ('#99ff66') : (`linear-gradient(90deg, #99ff66 ${progress}%, #323245 ${progress}%)`))),
                     color: '#fff',
                     outline: 'none',
                     overflow: 'hidden',
@@ -279,6 +281,13 @@ class InteractiveButton extends React.Component {
                 {
                     (!this.props.complete && progress === 100) && (
                         <img style={styles.checked} src={'./assets/images/load.gif'} />
+                    )
+                }
+                {
+                    (isModified && progress === 0) && (
+                        <svg style={styles.checked} xmlns="http://www.w3.org/2000/svg" width="439" height="439" viewBox="0 0 438.5 438.5">
+                            <path d="M409.1 109.2c-19.6-33.6-46.2-60.2-79.8-79.8C295.7 9.8 259.1 0 219.3 0c-39.8 0-76.5 9.8-110.1 29.4 -33.6 19.6-60.2 46.2-79.8 79.8C9.8 142.8 0 179.5 0 219.3c0 39.8 9.8 76.5 29.4 110.1 19.6 33.6 46.2 60.2 79.8 79.8 33.6 19.6 70.3 29.4 110.1 29.4s76.5-9.8 110.1-29.4c33.6-19.6 60.2-46.2 79.8-79.8 19.6-33.6 29.4-70.3 29.4-110.1C438.5 179.5 428.7 142.8 409.1 109.2zM361.4 231.8l-26 26c-3.6 3.6-7.9 5.4-12.8 5.4 -4.9 0-9.2-1.8-12.8-5.4l-54-54v143.3c0 4.9-1.8 9.2-5.4 12.8 -3.6 3.6-7.9 5.4-12.8 5.4h-36.5c-4.9 0-9.2-1.8-12.8-5.4 -3.6-3.6-5.4-7.9-5.4-12.8v-143.3l-54 54c-3.4 3.4-7.7 5.1-12.8 5.1 -5.1 0-9.4-1.7-12.8-5.1l-26-26c-3.4-3.4-5.1-7.7-5.1-12.9 0-5.1 1.7-9.4 5.1-12.8l103.4-103.4 26-26c3.4-3.4 7.7-5.1 12.8-5.1 5.1 0 9.4 1.7 12.8 5.1l26 26 103.4 103.4c3.4 3.4 5.1 7.7 5.1 12.8C366.6 224.1 364.9 228.4 361.4 231.8z" fill={this.state.hover ? '#fff' : '#323245'}/>
+                        </svg>
                     )
                 }
             </div>
