@@ -7,7 +7,7 @@ import { zip } from 'cross-unzip'
 
 import path from 'path'
 
-import { addSave, removeSave, loadSave, downloadCourse, addCourse, deleteCourse } from '../actions'
+import { addSave, removeSave, loadSave, downloadCourse, addCourse, deleteCourse, openPackage } from '../actions'
 
 const dialog = remote.dialog;
 
@@ -93,12 +93,17 @@ class InteractiveButton extends React.Component {
         }
     }
     addCourse () {
-        if (!this.props.isAdded) {
-            this.props.dispatch(addCourse(this.props.courseId));
+        if (!!this.props.isPackage) {
+            this.props.dispatch(openPackage(this.props.courseId));
+            this.props.onOpenPackage();
+        } else {
+            if (!this.props.isAdded) {
+                this.props.dispatch(addCourse(this.props.courseId, this.props.packageId));
+            }
         }
     }
     deleteCourse () {
-        this.props.dispatch(deleteCourse(this.props.smmdbId, this.props.saveId));
+        this.props.dispatch(deleteCourse(this.props.smmdbId, this.props.courseId, this.props.saveId));
     }
     showApiKey () {
         this.props.onApiKeyClick();

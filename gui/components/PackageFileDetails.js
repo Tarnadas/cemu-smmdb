@@ -3,7 +3,7 @@ import ReactCSS from 'reactcss';
 
 import InteractiveButton from './InteractiveButton';
 
-export default class SmmdbFileDetails extends React.Component {
+export default class PackageFileDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -121,48 +121,21 @@ export default class SmmdbFileDetails extends React.Component {
             !!this.props.course ? (
                 <div style={styles.div}>
                     <div style={styles.header}>
-                        {`${this.props.course.title} by ${this.props.course.ownername}`}
+                        {`${this.props.course.title} by ${this.props.course.maker}`}
                     </div>
                     <div style={styles.cancel} onClick={this.props.onClick}>
                         <img style={styles.cancelImg} src="./assets/images/cancel.svg" />
                     </div>
                     <div style={styles.line} />
                     <div style={styles.body}>
-                        {
-                            this.state.error ? (
-                                <div style={styles.bodyImgDiv}>
-                                    <img style={styles.bodyImg} src={'./assets/images/icon_large.png'} />
-                                </div>
-                            ) : (
-                                !!this.props.course.videoid ? (
-                                    <iframe style={styles.bodyImgDiv} src={`http://www.youtube.com/embed/${this.props.course.videoid}?disablekb=1&amp;iv_load_policy=3&amp;rel=0&amp;showinfo=0`} frameBorder="0" allowFullScreen />
-                                ) : (
-                                    <div style={styles.bodyImgDiv}>
-                                        <img onError={this.onError} style={styles.bodyImg} src={`http://smmdb.ddns.net/img/courses/thumbnails/${this.props.course.id}.pic`} />
-                                    </div>
-                                )
-                            )
-                        }
+                        <img style={styles.bodyImg} src={`${this.props.course.path}/thumbnail1.jpg`} />
                         <div style={styles.navigation}>
-                            <InteractiveButton type="downloadCourse" value="Download" progress={this.props.progress} complete={this.props.isDownloaded} courseId={this.props.course.id} courseName={this.props.course.title} ownerName={this.props.course.ownername} videoId={this.props.course.videoid} />
-                            {
-                                this.props.isPackage ? (
-                                    <InteractiveButton type="addCourse" value="Show Package" isPackage={true} courseId={this.props.course.id} onOpenPackage={this.props.onOpenPackage} />
-                                ) : (
-                                    <InteractiveButton type="addCourse" value="Add Course to Save" courseId={this.props.course.id} isDownloaded={this.props.isDownloaded} isAdded={this.props.isAdded} />
-                                )
-                            }
+                            <InteractiveButton type="addCourse" value="Add Course to Save" courseId={this.props.courseId} packageId={this.props.course.id} isAdded={this.props.isAdded} />
                         </div>
                     </div>
                     <div style={styles.line} />
                     <div style={styles.footer}>
-                        <img onError={this.onErrorThumbnail} style={styles.footerImg} src={
-                            this.state.errorThumbnail ? (
-                                './assets/images/not_found.png'
-                            ) : (
-                                `http://smmdb.ddns.net/img/courses/thumbnails/${this.props.course.id}.pic`
-                            )
-                        } />
+                        <img style={styles.footerImg} src={`${this.props.course.path}/thumbnail0.jpg`} />
                     </div>
                 </div>
             ) : (

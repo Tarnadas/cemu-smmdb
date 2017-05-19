@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactCSS from 'reactcss';
 import { connect } from 'react-redux';
-import { remote } from 'electron';
 
 import SaveFile from "./SaveFile";
 import SaveFileDetails from "./SaveFileDetails";
@@ -19,12 +18,11 @@ class SaveView extends React.Component {
         this.showSaveDetails = this.showSaveDetails.bind(this);
         this.hideSaveDetails = this.hideSaveDetails.bind(this);
     }
-    showSaveDetails (course, smmdbId, saveId) {
-        console.log(smmdbId);
-        console.log(saveId);
+    showSaveDetails (course, smmdbId, courseId, saveId) {
         this.setState({
             course,
             smmdbId,
+            courseId,
             saveId
         })
     }
@@ -57,7 +55,7 @@ class SaveView extends React.Component {
                 ul: {
                     margin: 'auto',
                     position: 'absolute',
-                    top: '0', right: '0', bottom: '0', left: '0',
+                    top: '60px', right: '0', bottom: '0', left: '0',
                     width: 'calc(100% - 180px)',
                     height: 'calc(100% - 140px)',
                     backgroundColor: '#07070f',
@@ -71,7 +69,7 @@ class SaveView extends React.Component {
         let self = this;
         return (
             <div style={styles.div}>
-                <SaveFileDetails course={this.state.course} smmdbId={this.state.smmdbId} saveId={this.state.saveId} onClick={this.hideSaveDetails} />
+                <SaveFileDetails course={this.state.course} smmdbId={this.state.smmdbId} courseId={this.state.courseId} saveId={this.state.saveId} onClick={this.hideSaveDetails} />
                 <ul style={styles.ul}>
                     {
                         Array.from((function* () {
@@ -79,6 +77,8 @@ class SaveView extends React.Component {
                                 let course = courses[self.state.courseNames[i]];
                                 yield <SaveFile onClick={self.showSaveDetails} course={course} smmdbId={
                                     !!self.props.save && !!self.props.save[i] && !!self.props.save[i].smmdbId && self.props.save[i].smmdbId
+                                } courseId={
+                                    !!self.props.save && !!self.props.save[i] && !!self.props.save[i].courseId && self.props.save[i].courseId
                                 } saveId={i} key={self.state.courseNames[i]} />
                             }
                         })())

@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 
 export default function mainApp (state, action) {
-    let appSaveData, cemuSavePath, currentDownloads, downloads, addedToSave, courseId;
+    let appSaveData, cemuSavePath, currentDownloads, downloads, addedToSave;
     switch (action.type) {
         case 'ADD_SAVE':
             appSaveData = state.get('appSaveData');
@@ -60,17 +60,20 @@ export default function mainApp (state, action) {
             saveState(state);
             return state;
         case 'FINISH_ADD_COURSE':
-            console.log(state.getIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'smmdb', ''+action.smmdbId, 'addedToSave']));
             if (state.getIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'smmdb', ''+action.smmdbId, 'addedToSave'])) {
                 return state;
             }
             state = state.setIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'smmdb', ''+action.smmdbId, 'addedToSave'], true);
             state = state.setIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'save', ''+action.saveId, 'smmdbId'], action.smmdbId);
-            let coursePath = path.join(state.get('cemuSave').pathToSave, `course${action.saveId.pad(3)}/data.json`);
-            if (fs.existsSync(coursePath)) {
-                let courseSaveData = JSON.parse(fs.readFileSync(coursePath));
-                state = state.setIn(['courseSaveData', action.saveId], fromJS(courseSaveData));
+            saveState(state);
+            return state;
+        case 'FINISH_ADD_PACKAGE_COURSE':
+            if (state.getIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'smmdb', ''+action.smmdbId, ''+action.courseId, 'addedToSave'])) {
+                return state;
             }
+            state = state.setIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'smmdb', ''+action.smmdbId, ''+action.courseId, 'addedToSave'], true);
+            state = state.setIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'save', ''+action.saveId, 'smmdbId'], action.smmdbId);
+            state = state.setIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'save', ''+action.saveId, 'courseId'], action.courseId);
             saveState(state);
             return state;
         case 'FINISH_DELETE_COURSE':
@@ -82,8 +85,26 @@ export default function mainApp (state, action) {
             if (!!action.smmdbId) {
                 state = state.setIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'smmdb', ''+action.smmdbId, 'addedToSave'], false);
             }
-            state = state.deleteIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'save', ''+action.saveId, 'smmdbId']);
+            state = state.deleteIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'save', ''+action.saveId]);
             saveState(state);
+            return state;
+        case 'FINISH_DELETE_PACKAGE_COURSE':
+            if (state.has('cemuSave')) {
+                state = state.delete('cemuSave');
+            }
+            state = state.set('cemuSave', action.cemuSave);
+            state = state.deleteIn(['courseSaveData', ''+action.saveId]);
+            if (!!action.smmdbId) {
+                state = state.setIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'smmdb', ''+action.smmdbId, ''+action.courseId, 'addedToSave'], false);
+            }
+            state = state.deleteIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'save', ''+action.saveId]);
+            saveState(state);
+            return state;
+        case 'FINISH_OPEN_PACKAGE':
+            state = state.set('currentPackage', action.coursePackage);
+            return state;
+        case 'CLOSE_PACKAGE':
+            state = state.delete('currentPackage');
             return state;
         case '@@redux/INIT':
             let save = remote.getGlobal('save');

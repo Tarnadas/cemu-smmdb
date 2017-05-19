@@ -1,3 +1,5 @@
+import { loadCourse } from 'cemu-smm'
+
 import DownloadedCourse from './DownloadedCourse';
 
 export default class SaveFileEditor {
@@ -15,7 +17,7 @@ export default class SaveFileEditor {
 
     }
 
-    async download (onStart, onProgress, onFinish, smmdbId, courseName, ownerName, videoId) {
+    async downloadCourse (onStart, onProgress, onFinish, smmdbId, courseName, ownerName, videoId) {
 
         try {
             this.downloadedCourses[smmdbId] = await (new DownloadedCourse(this.appSavePath)).download(onStart, onProgress, onFinish, smmdbId, courseName, ownerName, videoId);
@@ -25,25 +27,39 @@ export default class SaveFileEditor {
 
     }
 
-    async add (onFinish, smmdbId) {
+    async addCourse (onFinish, smmdbId) {
 
         let success = false, saveId = -1;
         try {
             let filePath = this.downloadedCourses[smmdbId].filePath;
-            for (let i = 0; i < filePath.length; i++) {
-                saveId = await this.cemuSave.addCourse(filePath[i]);
-                await this.cemuSave.courses[`course${saveId.pad(3)}`].exportJpeg();
-                this.downloadedCourses[smmdbId].addedToSave = true;
-            }
+            saveId = await this.cemuSave.addCourse(filePath[0]);
+            await this.cemuSave.courses[`course${saveId.pad(3)}`].exportJpeg();
+            this.downloadedCourses[smmdbId].addedToSave = true;
             success = true;
         } catch (err) {
-            console.log(err);
+            success = false;
         }
         onFinish(this.cemuSave, smmdbId, saveId, success);
 
     }
 
-    async delete (onFinish, smmdbId, saveId) {
+    async addPackageCourse (onFinish, courseId, smmdbId) {
+
+        let success = false, saveId = -1;
+        try {
+            let filePath = this.downloadedCourses[smmdbId].filePath;
+            saveId = await this.cemuSave.addCourse(filePath[courseId]);
+            //await this.cemuSave.courses[`course${saveId.pad(3)}`].exportJpeg();
+            this.downloadedCourses[smmdbId].addedToSave[courseId] = true;
+            success = true;
+        } catch (err) {
+            success = false;
+        }
+        onFinish(this.cemuSave, courseId, smmdbId, saveId, success);
+
+    }
+
+    async deleteCourse (onFinish, smmdbId, saveId) {
 
         let success = false;
         try {
@@ -53,6 +69,30 @@ export default class SaveFileEditor {
             console.log(err);
         }
         onFinish(this.cemuSave, smmdbId, saveId, success);
+
+    }
+
+    async deletePackageCourse (onFinish, smmdbId, courseId, saveId) {
+
+        let success = false;
+        try {
+            await this.cemuSave.deleteCourse(saveId);
+            success = true;
+        } catch (err) {
+            console.log(err);
+        }
+        onFinish(this.cemuSave, smmdbId, courseId, saveId, success);
+
+    }
+
+    async openPackage (onOpenFinish, coursePackage) {
+
+        let courses = [];
+        for (let i = 0; i < coursePackage.filePath.length; i++) {
+            courses.push(await loadCourse(coursePackage.filePath[i], coursePackage.smmdbId));
+            await courses[i].exportJpeg();
+        }
+        onOpenFinish(courses);
 
     }
 

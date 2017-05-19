@@ -35,6 +35,26 @@ export function addApiKey (apiKey) {
     }
 }
 
+export function openPackage (packageId) {
+    return {
+        type: 'OPEN_PACKAGE',
+        packageId
+    }
+}
+
+export function finishOpenPackage (coursePackage) {
+    return {
+        type: 'FINISH_OPEN_PACKAGE',
+        coursePackage
+    }
+}
+
+export function closePackage () {
+    return {
+        type: 'CLOSE_PACKAGE'
+    }
+}
+
 export function downloadCourse (courseId, courseName, ownerName, videoId) {
     return {
         type: 'DOWNLOAD_COURSE',
@@ -68,10 +88,11 @@ export function finishDownloadCourse (course) {
     }
 }
 
-export function addCourse (courseId) {
+export function addCourse (courseId, packageId) {
     return {
         type: 'ADD_COURSE',
-        courseId
+        courseId,
+        packageId
     }
 }
 
@@ -85,10 +106,22 @@ export function finishAddCourse (cemuSave, smmdbId, saveId, success) {
     }
 }
 
-export function deleteCourse (smmdbId, saveId) {
+export function finishAddPackageCourse (cemuSave, courseId, smmdbId, saveId, success) {
+    return {
+        type: 'FINISH_ADD_PACKAGE_COURSE',
+        cemuSave,
+        courseId,
+        smmdbId,
+        saveId,
+        success
+    }
+}
+
+export function deleteCourse (smmdbId, courseId, saveId) {
     return {
         type: 'DELETE_COURSE',
         smmdbId,
+        courseId,
         saveId
     }
 }
@@ -98,6 +131,17 @@ export function finishDeleteCourse (cemuSave, smmdbId, saveId, success) {
         type: 'FINISH_DELETE_COURSE',
         cemuSave,
         smmdbId,
+        saveId,
+        success
+    }
+}
+
+export function finishDeletePackageCourse (cemuSave, smmdbId, courseId, saveId, success) {
+    return {
+        type: 'FINISH_DELETE_PACKAGE_COURSE',
+        cemuSave,
+        smmdbId,
+        courseId,
         saveId,
         success
     }

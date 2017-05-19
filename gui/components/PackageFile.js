@@ -1,31 +1,38 @@
 import React from 'react';
 import ReactCSS from 'reactcss';
 
-export default class SaveFile extends React.Component {
-    constructor (props) {
+export default class PackageFile extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
-            hover: false
+            hover: false,
+            error: false
         };
         this.mouseEnter = this.mouseEnter.bind(this);
         this.mouseLeave = this.mouseLeave.bind(this);
+        this.onError = this.onError.bind(this);
         this.onClick = this.onClick.bind(this);
     }
-    mouseEnter () {
+    mouseEnter() {
         this.setState({
             hover: true
         });
     }
-    mouseLeave () {
+    mouseLeave() {
         this.setState({
             hover: false
         });
     }
-    onClick () {
-        console.log(this.props);
-        this.props.onClick(this.props.course, this.props.smmdbId, this.props.courseId, this.props.saveId);
+    onError (e) {
+        e.preventDefault();
+        this.setState({
+            error: true
+        });
     }
-    render () {
+    onClick () {
+        this.props.onClick(this.props.course, this.props.courseId)
+    }
+    render() {
         const styles = ReactCSS({
             'default': {
                 li: {
@@ -34,6 +41,7 @@ export default class SaveFile extends React.Component {
                     width: '180px',
                     height: '160px',
                     backgroundColor: '#a0a0af',
+                    background: !!this.props.isAdded ? '#33cc33' : '#a0a0af',
                     color: '#fff',
                     overflow: 'hidden',
                     cursor: 'pointer'
@@ -77,7 +85,7 @@ export default class SaveFile extends React.Component {
                 }
             }
         });
-        return !!this.props.course ? (
+        return (
             <li style={styles.li} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave} onClick={this.onClick}>
                 <div style={styles.divCrop}>
                     <img style={styles.img} src={`${this.props.course.path}/thumbnail1.jpg`} />
@@ -88,14 +96,6 @@ export default class SaveFile extends React.Component {
                     </div>
                 </div>
             </li>
-        ) : (
-            <li style={styles.li}>
-                <div style={styles.divCrop}>
-                    <img style={styles.img} src={`./assets/images/noise.gif`}/>
-                </div>
-                <div style={styles.divTitle} />
-            </li>
         )
-
     }
 }

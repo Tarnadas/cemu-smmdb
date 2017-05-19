@@ -89,7 +89,7 @@ class LoadSaveView extends React.Component {
                     left: '50%',
                     transform: 'translateY(-50%) translateX(-50%)',
                     textAlign: 'center',
-                    zIndex: 100,
+                    zIndex: '100',
                     width: '500px',
                     //height: '200px',
                     backgroundColor: '#0d633d',

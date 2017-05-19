@@ -92,7 +92,7 @@ export default class SaveFileDetails extends React.Component {
                     <div style={styles.body}>
                         <img style={styles.bodyImg} src={`${this.props.course.path}/thumbnail1.jpg`} />
                         <div style={styles.navigation}>
-                            <InteractiveButton type="deleteCourse" value="Delete" smmdbId={this.props.smmdbId} saveId={this.props.saveId} />
+                            <InteractiveButton type="deleteCourse" value="Delete" smmdbId={this.props.smmdbId} courseId={this.props.courseId} saveId={this.props.saveId} />
                         </div>
                     </div>
                     <div style={styles.line} />

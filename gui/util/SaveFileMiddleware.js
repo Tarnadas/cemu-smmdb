@@ -1,4 +1,4 @@
-import { startDownloadCourse, progressDownloadCourse, finishDownloadCourse, finishAddCourse, finishDeleteCourse } from '../actions';
+import { startDownloadCourse, progressDownloadCourse, finishDownloadCourse, finishAddCourse, finishAddPackageCourse, finishDeleteCourse, finishDeletePackageCourse, finishOpenPackage } from '../actions';
 
 export default function saveFileMiddleware (saveFileEditor) {
     return ({ dispatch, getState }) => next => action => {
@@ -14,18 +14,38 @@ export default function saveFileMiddleware (saveFileEditor) {
         let onAddFinish = (cemuSave, smmdbId, saveId, success) => {
             dispatch(finishAddCourse(cemuSave, smmdbId, saveId, success));
         };
+        let onAddPackageFinish = (cemuSave, courseId, smmdbId, saveId, success) => {
+            dispatch(finishAddPackageCourse(cemuSave, courseId, smmdbId, saveId, success));
+        };
         let onDeleteFinish = (cemuSave, smmdbId, saveId, success) => {
             dispatch(finishDeleteCourse(cemuSave, smmdbId, saveId, success));
         };
+        let onDeletePackageFinish = (cemuSave, smmdbId, courseId, saveId, success) => {
+            dispatch(finishDeletePackageCourse(cemuSave, smmdbId, courseId, saveId, success));
+        };
+        let onOpenFinish = (coursePackage) => {
+            dispatch(finishOpenPackage(coursePackage));
+        };
         switch (action.type) {
             case 'DOWNLOAD_COURSE':
-                saveFileEditor.download(onStart, onProgress, onFinish, action.courseId, action.courseName, action.ownerName, action.videoId);
+                saveFileEditor.downloadCourse(onStart, onProgress, onFinish, action.courseId, action.courseName, action.ownerName, action.videoId);
                 break;
             case 'ADD_COURSE':
-                saveFileEditor.add(onAddFinish, action.courseId);
+                if (!!action.packageId) {
+                    saveFileEditor.addPackageCourse(onAddPackageFinish, action.courseId, action.packageId);
+                } else {
+                    saveFileEditor.addCourse(onAddFinish, action.courseId);
+                }
                 break;
             case 'DELETE_COURSE':
-                saveFileEditor.delete(onDeleteFinish, action.smmdbId, action.saveId);
+                if (!!action.courseId) {
+                    saveFileEditor.deletePackageCourse(onDeletePackageFinish, action.smmdbId, action.courseId, action.saveId);
+                } else {
+                    saveFileEditor.deleteCourse(onDeleteFinish, action.smmdbId, action.saveId);
+                }
+                break;
+            case 'OPEN_PACKAGE':
+                saveFileEditor.openPackage(onOpenFinish, getState().getIn(['appSaveData', 'downloads', ''+action.packageId]).toJS());
                 break;
         }
         return next(action);

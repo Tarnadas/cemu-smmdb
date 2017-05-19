@@ -79,6 +79,7 @@ export default class DownloadedCourse {
                 });
             });
             this.filePath = await this.moveFiles();
+            this.isPackage = this.filePath.length > 1;
 
             // fix thumbnails + maker + title
             let promises = [];
