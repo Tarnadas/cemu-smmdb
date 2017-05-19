@@ -1,24 +1,27 @@
 import React from 'react';
 import ReactCSS from 'reactcss';
 import { connect } from 'react-redux';
+import request from 'request-promise';
 
 import SmmdbFile from './SmmdbFile';
 import SmmdbFileDetails from './SmmdbFileDetails';
 import PackageFile from "./PackageFile";
 import PackageFileDetails from "./PackageFileDetails";
 
-import { closePackage } from '../actions'
+import { closePackage, smmdbResult } from '../actions'
 
 class SmmdbView extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            course: null
+            course: null,
+            slider: false
         };
         this.showSaveDetails = this.showSaveDetails.bind(this);
         this.hideSaveDetails = this.hideSaveDetails.bind(this);
         this.onOpenPackage = this.onOpenPackage.bind(this);
         this.onClosePackage = this.onClosePackage.bind(this);
+        this.onSliderClick = this.onSliderClick.bind(this);
     }
     showSaveDetails (course, courseId) {
         this.setState({
@@ -42,6 +45,22 @@ class SmmdbView extends React.Component {
         });
         this.props.dispatch(closePackage());
     }
+    onSliderClick () {
+        this.setState((prevState) => ({
+            slider: !prevState.slider
+        }));
+        (async () => {
+            try {
+                let courses = null;
+                if (this.state.slider) {
+                    courses = JSON.parse(await request('http://smmdb.ddns.net/api/getcourses'));
+                } else {
+                    courses = JSON.parse(await request('http://smmdb.ddns.net/api/getcourses?ispackage=1'));
+                }
+                this.props.dispatch(smmdbResult(courses));
+            } catch (err) {}
+        })();
+    }
     render () {
         const styles = ReactCSS({
             'default': {
@@ -49,6 +68,9 @@ class SmmdbView extends React.Component {
                     width: '100%',
                     height: '100vh',
                     minHeight: '100vh',
+                    overflow: 'hidden',
+                    //position: 'absolute',
+                    //top: '0', right: '0', bottom: '0', left: '0'
                 },
                 ul: {
                     margin: 'auto',
@@ -78,6 +100,46 @@ class SmmdbView extends React.Component {
                     width: '32px',
                     height: '32px',
                     margin: '4px'
+                },
+                switchDiv: {
+                    display: 'inline-block',
+                    position: 'absolute',
+                    top: '20px', left: '250px',
+                    fontSize: '18px',
+                    height: '36px',
+                    //zIndex: '11'
+                },
+                switchText: {
+                    height: '36px',
+                    lineHeight: '36px',
+                    verticalAlign: 'top',
+                    display: 'inline-block'
+                },
+                switch: {
+                    width: '60px',
+                    height: '34px',
+                    backgroundColor: '#4252ff',
+                    cursor: 'pointer',
+                    borderRadius: '17px',
+                    display: 'inline-block',
+                    margin: '0px 10px'
+                },
+                sliderLeft: {
+                    width: '26px',
+                    height: '26px',
+                    borderRadius: '13px',
+                    margin: '4px',
+                    backgroundColor: '#fff',
+                    transition: '.4s'
+                },
+                sliderRight: {
+                    width: '26px',
+                    height: '26px',
+                    borderRadius: '13px',
+                    marginTop: '4px',
+                    marginLeft: '30px',
+                    backgroundColor: '#fff',
+                    transition: '.4s'
                 }
             },
         });
@@ -120,6 +182,13 @@ class SmmdbView extends React.Component {
                         </div>
                     ) : (
                         <div>
+                            <div style={styles.switchDiv}>
+                                <div style={styles.switchText}>Courses</div>
+                                <div style={styles.switch} onClick={this.onSliderClick}>
+                                    <div style={this.state.slider ? styles.sliderRight : styles.sliderLeft} />
+                                </div>
+                                <div style={styles.switchText}>Packages</div>
+                            </div>
                             <SmmdbFileDetails course={this.state.course} onClick={this.hideSaveDetails} onOpenPackage={this.onOpenPackage} progress={
                                 !!this.state.course && !!progresses[this.state.course.id] ? progresses[this.state.course.id] : null
                             } isDownloaded={

@@ -27,7 +27,7 @@ export default class DownloadedCourse {
         appSavePath = path;
     }
 
-    download (onStart, onProgress, onFinish, courseId, courseName, ownerName, videoId) {
+    download (onStart, onProgress, onFinish, courseId, courseName, ownerName, videoId, courseType) {
 
         this.smmdbId = courseId;
 
@@ -40,6 +40,7 @@ export default class DownloadedCourse {
 
         let courseUrl = `http://smmdb.ddns.net/courses/${courseId}`;
         let filePathTemp = path.join(appSavePath, `temp/${courseId}`);
+        let coursePathTemp = path.join(appSavePath, `temp/course${courseId}`);
         this.filePath = path.join(appSavePath, `downloads/${courseId}`);
         let stream = fs.createWriteStream(filePathTemp);
 
@@ -72,71 +73,73 @@ export default class DownloadedCourse {
                 })
             });
             await new Promise((resolve) => {
-                unzip(filePathTemp, this.filePath, (err) => {
+                unzip(filePathTemp, coursePathTemp, (err) => {
                     if (err) throw err;
                     fs.unlink(filePathTemp, () => {});
                     resolve();
                 });
             });
-            this.filePath = await this.moveFiles();
+            this.filePath = await this.moveFiles(coursePathTemp);
             this.isPackage = this.filePath.length > 1;
 
             // fix thumbnails + maker + title
-            let promises = [];
-            for (let i = 0; i < this.filePath.length; i++) {
-                promises.push(new Promise(async (resolve) => {
-                    let course = await loadCourse(this.filePath[i]);
-                    if (await course.isThumbnailBroken()) {
-                        let isFixed = false, iteration = 0, thumbnailPath = null;
-                        let thumbnailUrl = `http://smmdb.ddns.net/img/courses/thumbnails/${courseId}.pic`;
-                        while (!isFixed && iteration < 2) {
-                            try {
-                                isFixed = await new Promise((resolve) => {
-                                    let thumbnailReq = request({
-                                        method: 'GET',
-                                        uri: thumbnailUrl
+            if (courseType !== 2) { // !== Wii U Dump
+                let promises = [];
+                for (let i = 0; i < this.filePath.length; i++) {
+                    promises.push(new Promise(async (resolve) => {
+                        let course = await loadCourse(this.filePath[i]);
+                        if (await course.isThumbnailBroken()) {
+                            let isFixed = false, iteration = 0, thumbnailPath = null;
+                            let thumbnailUrl = `http://smmdb.ddns.net/img/courses/thumbnails/${courseId}.pic`;
+                            while (!isFixed && iteration < 2) {
+                                try {
+                                    isFixed = await new Promise((resolve) => {
+                                        let thumbnailReq = request({
+                                            method: 'GET',
+                                            uri: thumbnailUrl
+                                        });
+                                        thumbnailPath = path.join(appSavePath, `temp/${courseId}_${i}.pic`);
+                                        let thumbnailStream = fs.createWriteStream(thumbnailPath);
+                                        thumbnailReq.pipe(thumbnailStream);
+                                        thumbnailReq.on('response', (data) => {
+                                            if (data.statusCode === 404) {
+                                                thumbnailPath = null;
+                                                resolve(false);
+                                            }
+                                        });
+                                        thumbnailReq.on('end', () => {
+                                            resolve(true);
+                                        });
                                     });
-                                    thumbnailPath = path.join(appSavePath, `temp/${courseId}_${i}.pic`);
-                                    let thumbnailStream = fs.createWriteStream(thumbnailPath);
-                                    thumbnailReq.pipe(thumbnailStream);
-                                    thumbnailReq.on('response', (data) => {
-                                        if (data.statusCode === 404) {
-                                            thumbnailPath = null;
-                                            resolve(false);
-                                        }
-                                    });
-                                    thumbnailReq.on('end', () => {
-                                        resolve(true);
-                                    });
-                                });
-                                if (!isFixed) {
-                                    if (!videoId) {
-                                        if (process.env.NODE_ENV === 'development') {
-                                            thumbnailPath = './build/assets/images/icon_large.png';
+                                    if (!isFixed) {
+                                        if (!videoId) {
+                                            if (process.env.NODE_ENV === 'development') {
+                                                thumbnailPath = './build/assets/images/icon_large.png';
+                                            } else {
+                                                thumbnailPath = './resources/app/assets/images/icon_large.png';
+                                            }
+                                            isFixed = true;
                                         } else {
-                                            thumbnailPath = './resources/app/assets/images/icon_large.png';
+                                            thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
                                         }
-                                        isFixed = true;
-                                    } else {
-                                        thumbnailUrl = `https://img.youtube.com/vi/${videoId}/0.jpg`;
                                     }
+                                } catch (err) {
+                                    isFixed = true;
                                 }
-                            } catch (err) {
-                                isFixed = true;
+                                iteration++;
                             }
-                            iteration++;
+                            if (!!thumbnailPath) {
+                                await course.setThumbnail(thumbnailPath);
+                            }
                         }
-                        if (!!thumbnailPath) {
-                            await course.setThumbnail(thumbnailPath);
-                        }
-                    }
-                    await course.setMaker(ownerName, false);
-                    await course.setTitle(courseName, false);
-                    await course.writeCrc();
-                    resolve();
-                }));
+                        await course.setMaker(ownerName, false);
+                        await course.setTitle(courseName, false);
+                        await course.writeCrc();
+                        resolve();
+                    }));
+                }
+                await Promise.all(promises);
             }
-            await Promise.all(promises);
 
             for (let i = 0; i < this.filePath.length; i++) {
                 let filePath = path.join(this.filePath[i], 'data.json');
@@ -150,7 +153,7 @@ export default class DownloadedCourse {
 
     }
 
-    async moveFiles () {
+    async moveFiles (coursePathTemp) {
 
         let courseFolders = [];
         let getCourseFolders = async (filePath) => {
@@ -167,12 +170,12 @@ export default class DownloadedCourse {
                         }
                     }
 
-
                     resolve();
                 })
             })
         };
-        await getCourseFolders(this.filePath);
+        await getCourseFolders(coursePathTemp);
+
         let isPackage = false;
         if (courseFolders.length > 1) {
             isPackage = true;
@@ -196,7 +199,7 @@ export default class DownloadedCourse {
                     resolve();
                 });
             });
-            if (isPackage) {
+            /*if (isPackage) {
                 let split = courseFolders[i].split('\\');
                 let folder = courseFolders[i].substr(0, courseFolders[i].length - split[split.length-1].length - 1);
                 rimraf(folder, () => {});
@@ -204,8 +207,10 @@ export default class DownloadedCourse {
             } else {
                 fs.rmdir(courseFolders[i], () => {});
                 returnFolders.push(this.filePath);
-            }
+            }*/
+            returnFolders.push(targetDir);
         }
+        rimraf(coursePathTemp, () => {});
         return returnFolders;
 
     }

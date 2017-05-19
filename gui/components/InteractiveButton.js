@@ -89,7 +89,7 @@ class InteractiveButton extends React.Component {
     }
     downloadCourse () {
         if (!this.props.progress && !this.props.complete) {
-            this.props.dispatch(downloadCourse(this.props.courseId, this.props.courseName, this.props.ownerName, this.props.videoId));
+            this.props.dispatch(downloadCourse(this.props.courseId, this.props.courseName, this.props.ownerName, this.props.videoId, this.props.courseType));
         }
     }
     addCourse () {

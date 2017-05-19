@@ -22,7 +22,6 @@ export default class SaveFile extends React.Component {
         });
     }
     onClick () {
-        console.log(this.props);
         this.props.onClick(this.props.course, this.props.smmdbId, this.props.courseId, this.props.saveId);
     }
     render () {
