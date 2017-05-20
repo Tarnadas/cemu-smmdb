@@ -84,6 +84,22 @@ class SmmdbView extends React.Component {
                     border: '12px solid #6e6e85',
                     listStyleType: 'none'
                 },
+                packageName: {
+                    margin: '0 auto',
+                    position: 'absolute',
+                    zIndex: '100',
+                    top: '50px', right: '0', bottom: '0', left: '0',
+                    width: 'calc(100% - 330px)',
+                    height: '28px',
+                    lineHeight: '28px',
+                    fontSize: '16px',
+                    padding: '0 10px',
+                    overflow: 'hidden',
+                    backgroundColor: '#fcf6ad',
+                    //boxSizing: 'border-box',
+                    border: '4px solid #000',
+                    borderRadius: '8px'
+                },
                 close: {
                     display: 'block',
                     position: 'absolute',
@@ -161,6 +177,9 @@ class SmmdbView extends React.Component {
                 {
                     !!this.props.currentPackage ? (
                         <div>
+                            <div style={styles.packageName}>
+                                {this.props.currentPackageName}
+                            </div>
                             <PackageFileDetails course={this.state.course} courseId={this.state.courseId} onClick={this.hideSaveDetails} isAdded={
                                 !!this.state.course && !!this.props.currentSave && !!this.props.currentSave[this.state.course.id] && !!this.props.currentSave[this.state.course.id][this.state.courseId] && !!this.props.currentSave[this.state.course.id][this.state.courseId].addedToSave
                             } />
@@ -230,12 +249,14 @@ export default connect((state) => {
     let downloads = state.getIn(['appSaveData', 'downloads']);
     let currentSave = state.getIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'smmdb']);
     let currentPackage = state.get('currentPackage');
+    let currentPackageName = state.get('currentPackageName');
     return {
         courses: state.get('smmdb').courses,
         order: state.get('smmdb').order,
         currentDownloads: !!currentDownloads ? currentDownloads.toJS() : null,
         downloads: !!downloads ? downloads.toJS() : null,
         currentSave: !!currentSave ? currentSave.toJS() : null,
-        currentPackage
+        currentPackage,
+        currentPackageName
     }
 })(SmmdbView);

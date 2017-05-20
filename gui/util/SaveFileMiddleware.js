@@ -23,8 +23,8 @@ export default function saveFileMiddleware (saveFileEditor) {
         let onDeletePackageFinish = (cemuSave, smmdbId, courseId, saveId, success) => {
             dispatch(finishDeletePackageCourse(cemuSave, smmdbId, courseId, saveId, success));
         };
-        let onOpenFinish = (coursePackage) => {
-            dispatch(finishOpenPackage(coursePackage));
+        let onOpenFinish = (coursePackage, packageName) => {
+            dispatch(finishOpenPackage(coursePackage, packageName));
         };
         switch (action.type) {
             case 'DOWNLOAD_COURSE':
@@ -45,7 +45,7 @@ export default function saveFileMiddleware (saveFileEditor) {
                 }
                 break;
             case 'OPEN_PACKAGE':
-                saveFileEditor.openPackage(onOpenFinish, getState().getIn(['appSaveData', 'downloads', ''+action.packageId]).toJS());
+                saveFileEditor.openPackage(onOpenFinish, getState().getIn(['appSaveData', 'downloads', ''+action.packageId]).toJS(), action.packageName);
                 break;
         }
         return next(action);

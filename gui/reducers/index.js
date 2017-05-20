@@ -109,9 +109,11 @@ export default function mainApp (state, action) {
             return state;
         case 'FINISH_OPEN_PACKAGE':
             state = state.set('currentPackage', action.coursePackage);
+            state = state.set('currentPackageName', action.packageName);
             return state;
         case 'CLOSE_PACKAGE':
             state = state.delete('currentPackage');
+            state = state.delete('currentPackageName');
             return state;
         case '@@redux/INIT':
             let save = remote.getGlobal('save');

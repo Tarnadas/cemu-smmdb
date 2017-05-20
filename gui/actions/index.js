@@ -35,17 +35,19 @@ export function addApiKey (apiKey) {
     }
 }
 
-export function openPackage (packageId) {
+export function openPackage (packageId, packageName) {
     return {
         type: 'OPEN_PACKAGE',
-        packageId
+        packageId,
+        packageName
     }
 }
 
-export function finishOpenPackage (coursePackage) {
+export function finishOpenPackage (coursePackage, packageName) {
     return {
         type: 'FINISH_OPEN_PACKAGE',
-        coursePackage
+        coursePackage,
+        packageName
     }
 }
 

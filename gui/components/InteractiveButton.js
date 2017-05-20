@@ -95,7 +95,7 @@ class InteractiveButton extends React.Component {
     addCourse () {
         if (this.props.saveFull) return;
         if (!!this.props.isPackage) {
-            this.props.dispatch(openPackage(this.props.courseId));
+            this.props.dispatch(openPackage(this.props.courseId, this.props.packageName));
             this.props.onOpenPackage();
         } else {
             if (!this.props.isAdded) {

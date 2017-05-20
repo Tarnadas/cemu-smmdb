@@ -85,14 +85,14 @@ export default class SaveFileEditor {
 
     }
 
-    async openPackage (onOpenFinish, coursePackage) {
+    async openPackage (onOpenFinish, coursePackage, packageName) {
 
         let courses = [];
         for (let i = 0; i < coursePackage.filePath.length; i++) {
             courses.push(await loadCourse(coursePackage.filePath[i], coursePackage.smmdbId));
             await courses[i].exportJpeg();
         }
-        onOpenFinish(courses);
+        onOpenFinish(courses, packageName);
 
     }
 
