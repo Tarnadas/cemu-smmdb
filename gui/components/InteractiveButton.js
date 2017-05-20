@@ -93,6 +93,7 @@ class InteractiveButton extends React.Component {
         }
     }
     addCourse () {
+        if (this.props.saveFull) return;
         if (!!this.props.isPackage) {
             this.props.dispatch(openPackage(this.props.courseId));
             this.props.onOpenPackage();
@@ -124,6 +125,7 @@ class InteractiveButton extends React.Component {
         const progress = !!this.props.progress ? this.props.progress*100 : 0;
         const isDisabled = !!this.props.isDownloaded ? false : this.props.isDownloaded === false;
         const isAdded = !!this.props.isAdded;
+        const saveFull = this.props.type === 'addCourse' && this.props.saveFull;
         const styles = ReactCSS({
             'default': {
                 button: {
@@ -133,7 +135,19 @@ class InteractiveButton extends React.Component {
                     height: '40px',
                     width: !!this.props.width ? this.props.width : '100%',
                     lineHeight: '40px',
-                    background: isModified ? (`linear-gradient(90deg, #99ff66 ${progress}%, #CC7034 ${progress}%)`) : (isAdded ? ('#33cc33') : (!!this.props.complete ? ('#99ff66') : (`linear-gradient(90deg, #99ff66 ${progress}%, #ffe500 ${progress}%)`))),
+                    background: saveFull ? (
+                        '#DF4E20'
+                    ) : (
+                        isModified ? (
+                            `linear-gradient(90deg, #99ff66 ${progress}%, #CC7034 ${progress}%)`
+                        ) : (
+                            isAdded ? (
+                                '#33cc33'
+                            ) : (
+                                !!this.props.complete ? ('#99ff66') : (`linear-gradient(90deg, #99ff66 ${progress}%, #ffe500 ${progress}%)`)
+                            )
+                        )
+                    ),
                     color: '#323245',
                     outline: 'none',
                     overflow: 'hidden',
@@ -150,7 +164,19 @@ class InteractiveButton extends React.Component {
                     height: '40px',
                     width: !!this.props.width ? this.props.width : '100%',
                     lineHeight: '40px',
-                    background: isModified ? (`linear-gradient(90deg, #99ff66 ${progress}%, #323245 ${progress}%)`) : (isAdded ? ('#33cc33') : (!!this.props.complete ? ('#99ff66') : (`linear-gradient(90deg, #99ff66 ${progress}%, #323245 ${progress}%)`))),
+                    background: saveFull ? (
+                        '#DF4E20'
+                    ) : (
+                        isModified ? (
+                            `linear-gradient(90deg, #99ff66 ${progress}%, #323245 ${progress}%)`
+                        ) : (
+                            isAdded ? (
+                                '#33cc33'
+                            ) : (
+                                !!this.props.complete ? ('#99ff66') : (`linear-gradient(90deg, #99ff66 ${progress}%, #323245 ${progress}%)`)
+                            )
+                        )
+                    ),
                     color: '#fff',
                     outline: 'none',
                     overflow: 'hidden',
@@ -263,7 +289,9 @@ class InteractiveButton extends React.Component {
                     )
                 )
             } onClick={isDisabled ? null : this.handleClick} onMouseEnter={this.mouseEnter} onMouseLeave={this.mouseLeave}>
-                {this.props.value}
+                {
+                    saveFull ? 'Your save is full' : this.props.value
+                }
                 {
                     this.props.cancelable && (
                         <div style={styles.cancel} onClick={this.removeSave}>
@@ -294,4 +322,9 @@ class InteractiveButton extends React.Component {
         )
     }
 }
-export default connect()(InteractiveButton);//{this.state.hover ? '#fff' : '#323245'}
+export default connect((state) => {
+    let saveFull = !!state.get('saveFull');
+    return {
+        saveFull
+    }
+})(InteractiveButton);
