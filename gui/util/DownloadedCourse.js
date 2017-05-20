@@ -27,7 +27,7 @@ export default class DownloadedCourse {
         appSavePath = path;
     }
 
-    download (onStart, onProgress, onFinish, courseId, courseName, ownerName, videoId, courseType, modified) {
+    async download (onStart, onProgress, onFinish, courseId, courseName, ownerName, videoId, courseType, modified) {
 
         this.smmdbId = courseId;
 
@@ -38,7 +38,11 @@ export default class DownloadedCourse {
             fs.mkdirSync(path.join(appSavePath, 'downloads'));
         }
 
-        let courseUrl = `http://smmdb.ddns.net/courses/${courseId}`;
+        let publicIP = '';
+        try {
+            publicIP = await require('public-ip').v4();
+        } catch (err) {}
+        let courseUrl = `http://smmdb.ddns.net/courses/${courseId}${!!publicIP ? `?ip=${publicIP}` : ''}`;
         let filePathTemp = path.join(appSavePath, `temp/${courseId}`);
         let coursePathTemp = path.join(appSavePath, `temp/course${courseId}`);
         this.filePath = path.join(appSavePath, `downloads/${courseId}`);
