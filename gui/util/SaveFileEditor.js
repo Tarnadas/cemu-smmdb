@@ -34,7 +34,7 @@ export default class SaveFileEditor {
             let filePath = this.downloadedCourses[smmdbId].filePath;
             saveId = await this.cemuSave.addCourse(filePath[0]);
             await this.cemuSave.courses[`course${saveId.pad(3)}`].exportJpeg();
-            this.downloadedCourses[smmdbId].addedToSave = true;
+            //this.downloadedCourses[smmdbId].addedToSave = true;
             success = true;
         } catch (err) {
             success = false;
@@ -50,7 +50,7 @@ export default class SaveFileEditor {
             let filePath = this.downloadedCourses[smmdbId].filePath;
             saveId = await this.cemuSave.addCourse(filePath[courseId]);
             //await this.cemuSave.courses[`course${saveId.pad(3)}`].exportJpeg();
-            this.downloadedCourses[smmdbId].addedToSave[courseId] = true;
+            //this.downloadedCourses[smmdbId].addedToSave[courseId] = true;
             success = true;
         } catch (err) {
             success = false;
