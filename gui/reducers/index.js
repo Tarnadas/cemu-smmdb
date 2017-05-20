@@ -75,6 +75,10 @@ export default function mainApp (state, action) {
             if (state.getIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'smmdb', ''+action.smmdbId, ''+action.courseId, 'addedToSave'])) {
                 return state;
             }
+            if (!action.success) {
+                state = state.set('saveFull', true);
+                return state;
+            }
             state = state.setIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'smmdb', ''+action.smmdbId, ''+action.courseId, 'addedToSave'], true);
             state = state.setIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'save', ''+action.saveId, 'smmdbId'], action.smmdbId);
             state = state.setIn(['appSaveData', 'cemuSaveData', state.get('currentSave'), 'save', ''+action.saveId, 'courseId'], action.courseId);
