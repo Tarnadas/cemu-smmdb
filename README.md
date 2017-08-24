@@ -19,3 +19,7 @@ If you are looking for the source code, go to [SMMDB repository](https://github.
 ## Delete multiple courses
 
 ![delete selected](https://github.com/Tarnadas/cemu-smmdb/blob/master/gifs/delete_selected.gif?raw=true)
+
+## Star courses from save folder view
+
+![star course](https://github.com/Tarnadas/cemu-smmdb/blob/master/gifs/star_course.gif?raw=true)
